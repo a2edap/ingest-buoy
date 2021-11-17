@@ -1,10 +1,12 @@
-# INGEST-TEMPLATE
+# INGEST-BUOY
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![tests](https://github.com/tsdat/ingest-template/actions/workflows/tests.yml/badge.svg)](https://github.com/tsdat/ingest-template/actions/workflows/tests.yml)
 
 This repository helps provide a way to group similar `tsdat` ingest scripts in the same
-repository so that they can be more easily maintained and deployed on input files. 
+repository so that they can be more easily maintained and deployed on input files. It
+has been adapted to run various ingest scripts for the [Atmosphere to Electrons BUOY
+project](https://a2e.energy.gov/projects/buoy).
 
 
 ## How it works

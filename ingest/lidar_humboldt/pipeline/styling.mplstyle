@@ -1,3 +1,5 @@
+# TODO – Maintainer: If you have specific plot style requirements or want to set
+# different defaults for your ingest developers to use, please update those here.
 figure.constrained_layout.use: true
 figure.figsize      : 14, 8
 figure.dpi          : 150
