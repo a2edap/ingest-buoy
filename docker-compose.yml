@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  ingest:
+    build: .
+    volumes:
+      # mounted at runtime
+      - .:/home/root/ingest:cached
+    environment:
+      - PYTHONPATH=/home/root/ingest
+    working_dir: /home/root/ingest

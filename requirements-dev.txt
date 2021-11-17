@@ -1,0 +1,6 @@
+-r requirements.txt
+cookiecutter
+pytest
+coverage
+black
+flake8

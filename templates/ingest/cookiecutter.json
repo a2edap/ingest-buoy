@@ -1,0 +1,17 @@
+{
+    "author": "First Last",
+    "email": "",
+    "location": "Location",
+    "location_slug": "{{ cookiecutter.location | slugify(separator='_') }}",
+    "ingest": "Ingest Name",
+    "ingest_slug": "{{ cookiecutter.ingest | slugify(separator='_') }}_{{ cookiecutter.location_slug }}",
+    "description": "description",
+    "use_custom_filehandler": [
+        "no",
+        "yes"
+    ],
+    "use_custom_qc": [
+        "no",
+        "yes"
+    ]
+}

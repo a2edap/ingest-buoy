@@ -1,0 +1,124 @@
+pipeline:
+  type: Ingest
+
+  # These parameters will be used to name files.
+  location_id: "pnnl"
+  dataset_name: "example_ingest"
+  # qualifier: ""
+  # temporal: ""
+  data_level: "b1"  # If not applying QC this should be set to "a1"
+
+dataset_definition:
+  attributes:
+    title: "Example Ingest"
+    description: "This is an example ingest meant to demonstrate how one might set up an ingestion pipeline using this template repository. It should be deleted before this repository or any of its ingests are used in a production environment."
+    conventions: MHKiT-Cloud Data Standards v. 1.0
+    institution: Pacific Northwest National Laboratory
+    code_url: https://github.com/tsdat/ingest-template
+    location_meaning: "Pacific Northwest National Laboratory"
+
+  dimensions:
+    time:
+        length: unlimited
+
+  variables:
+
+    time:
+      input:
+        name: Timestamp (end of interval)
+        converter:
+          classname: tsdat.utils.converters.StringTimeConverter
+          parameters:
+            timezone: UTC
+            time_format: "%Y-%m-%d %H:%M:%S"
+      dims: [time]
+      type: long
+      attrs:
+        long_name: Time (UTC)
+        standard_name: time
+        units: seconds since 1970-01-01T00:00:00
+    
+    example_var:          # Name of variable in the output file
+      input:
+        name: "Example"   # Name of variable in the input file
+        # units: m        # Units the input variable was measured in. Provide this if 
+                          # the output units are different and you want tsdat to do the
+                          # conversion.
+      dims: [time]        # List of coordinates that dimension this variable. `time` is
+                          # a very common dimension, sometimes `height`, too.
+      type: float         # The data type, typically one of: `float`, `long`, `int`
+      attrs:
+        long_name: Example Var  # Label used by Xarray and other libraries for plotting
+        standard_name: ""       # Standard name from the CF Standard names table. 
+                                # Provide this if possible, otherwise remove it.
+        comment: ""             # User-friendly description of the property.
+        units: km               # Units attribute from the CF Standard list of units. 
+                                # Always provide this, even for 'unitless' quantities –
+                                # set `units: "1"` for such quantities.
+    
+    latitude:
+      data: 39.90891
+      type: float
+      attrs:
+        long_name: "North latitude"
+        standard_name: "latitude"
+        comment: "Recorded lattitude at the instrument location"
+        units: "degree_N"
+        valid_range: [-90.f, 90.f]
+
+    longitude:
+      data: -105.22715
+      type: float
+      attrs:
+        long_name: "East longitude"
+        standard_name: "longitude"
+        comment: "Recorded longitude at the instrument location"
+        units: "degree_E"
+        valid_range: [-180.f, 180.f]
+    
+    altitude:
+      data: 1828.8
+      type: float
+      attrs:
+        long_name: "Altitude"
+        standard_name: "altitude"
+        comment: "Recorded altitude at the instrument location"
+        units: m
+    
+#-----------------------------------------------------------------
+quality_management:
+
+  #---------------------------------------------------------------
+  manage_missing_coordinates:
+    checker:
+      classname: tsdat.qc.checkers.CheckMissing
+    handlers:
+      - classname: tsdat.qc.handlers.FailPipeline
+    variables:
+      - COORDS
+
+  manage_coordinate_monotonicity:
+    checker:
+      classname: tsdat.qc.checkers.CheckMonotonic
+    handlers:
+      - classname: tsdat.qc.handlers.SortDatasetByCoordinate
+        parameters:
+          ascending: True
+          correction: "Coordinate data was sorted in order to ensure monotonicity."
+    variables:
+      - COORDS
+
+  #---------------------------------------------------------------
+  manage_missing_values:
+    checker:
+      classname: tsdat.qc.checkers.CheckMissing
+    handlers:
+      - classname: tsdat.qc.handlers.RemoveFailedValues
+      - classname: tsdat.qc.handlers.RecordQualityResults
+        parameters:
+          bit: 1
+          assessment: Bad
+          meaning: "Value is equal to _FillValue or NaN"
+    variables:
+      - DATA_VARS
+    exclude: [latitude, longitude, altitude]

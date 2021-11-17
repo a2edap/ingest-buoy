@@ -1,0 +1,8 @@
+tsdat == 0.2.10
+netcdf4
+xarray
+numpy
+matplotlib
+act-atmos
+parse
+typer

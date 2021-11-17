@@ -1,0 +1,34 @@
+
+storage:
+
+  # This section should not be modified unless there is a strong need. Please contact
+  # the repository maintainers if you feel you need to use different settings here –
+  # there may be another way to accomplish what you need.
+  classname:  ${STORAGE_CLASSNAME}
+  parameters:
+    retain_input_files: ${RETAIN_INPUT_FILES}
+    root_dir: ${ROOT_DIR}
+    bucket_name: ${STORAGE_BUCKET}
+
+  file_handlers:
+
+    input:
+
+      csv:
+        file_pattern: '.*\.csv'                       # Matches files ending in '.csv'
+        classname: tsdat.io.filehandlers.CsvHandler   # FileHandler module to use
+        parameters:     # Parameters to pass to CsvHandler. Comment out if not using.
+          read:
+            # You can add parameters that are passed to pandas.read_csv() as kwargs:
+            read_csv:
+              index_col: False      # Treat the first column (time) as a data variable
+              header: 2             # Where to look for the header (header line number - 1) 
+
+    
+    # The output section should not be modified unless there is a strong need. Please
+    # contact the repository maintainers if you feel you need to write to a different
+    # format.
+    output:
+      netcdf:
+        file_extension: '.nc'
+        classname: tsdat.io.filehandlers.NetCdfHandler

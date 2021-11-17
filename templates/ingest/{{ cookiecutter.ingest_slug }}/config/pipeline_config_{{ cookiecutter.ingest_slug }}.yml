@@ -1,0 +1,137 @@
+# TODO – Developer: Fill out this file. You can find the official documentation at
+# https://github.com/tsdat/tsdat/blob/main/examples/templates/ingest_pipeline_template.yml
+# or open an existing example in this repository to see what you can do here. Note that
+# the some projects may use slightly different metadata conventions and requirements
+# than tsdat.
+
+pipeline:
+  type: Ingest
+
+  # These parameters will be used to name files.
+  location_id: "{{ cookiecutter.location_slug }}"
+  dataset_name: "{{ cookiecutter.ingest | slugify(separator='_') }}"
+  # qualifier: ""
+  # temporal: ""
+  data_level: "b1"  # If not applying QC this should be set to "a1"
+
+dataset_definition:
+  attributes:
+    title: "{{ cookiecutter.ingest }}"
+    description: "{{ cookiecutter.description }}"
+    conventions: MHKiT-Cloud Data Standards v. 1.0
+    institution: Pacific Northwest National Laboratory
+    code_url: https://github.com/tsdat/ingest-template
+    location_meaning: "{{ cookiecutter.location }}"
+
+  dimensions:
+    time:
+        length: unlimited
+
+  variables:
+
+    time:
+      input:
+        name: Timestamp (end of interval)
+        converter:
+          classname: tsdat.utils.converters.StringTimeConverter
+          parameters:
+            timezone: UTC
+            time_format: "%Y-%m-%d %H:%M:%S"
+      dims: [time]
+      type: long
+      attrs:
+        long_name: Time (UTC)
+        standard_name: time
+        units: seconds since 1970-01-01T00:00:00
+    
+    example_var:          # Name of variable in the output file
+      input:
+        name: "Example"   # Name of variable in the input file
+        # units: m        # Units the input variable was measured in. Provide this if 
+                          # the output units are different and you want tsdat to do the
+                          # conversion.
+      dims: [time]        # List of coordinates that dimension this variable. `time` is
+                          # a very common dimension, sometimes `height`, too.
+      type: float         # The data type, typically one of: `float`, `long`, `int`
+      attrs:
+        long_name: Example Var  # Label used by Xarray and other libraries for plotting
+        standard_name: ""       # Standard name from the CF Standard names table. 
+                                # Provide this if possible, otherwise remove it.
+        comment: ""             # User-friendly description of the property.
+        units: km               # Units attribute from the CF Standard list of units. 
+                                # Always provide this, even for 'unitless' quantities –
+                                # set `units: "1"` for such quantities.
+    
+    latitude:
+      data: 39.90891
+      type: float
+      attrs:
+        long_name: "North latitude"
+        standard_name: "latitude"
+        comment: "Recorded lattitude at the instrument location"
+        units: "degree_N"
+        valid_range: [-90.f, 90.f]
+
+    longitude:
+      data: -105.22715
+      type: float
+      attrs:
+        long_name: "East longitude"
+        standard_name: "longitude"
+        comment: "Recorded longitude at the instrument location"
+        units: "degree_E"
+        valid_range: [-180.f, 180.f]
+    
+    altitude:
+      data: 1828.8
+      type: float
+      attrs:
+        long_name: "Altitude"
+        standard_name: "altitude"
+        comment: "Recorded altitude at the instrument location"
+        units: m
+    
+#-----------------------------------------------------------------
+quality_management:
+
+  #---------------------------------------------------------------
+  manage_missing_coordinates:
+    checker:
+      classname: tsdat.qc.checkers.CheckMissing
+    handlers:
+      - classname: tsdat.qc.handlers.FailPipeline
+    variables:
+      - COORDS
+
+  manage_coordinate_monotonicity:
+    checker:
+      classname: tsdat.qc.checkers.CheckMonotonic
+    handlers:
+      - classname: tsdat.qc.handlers.SortDatasetByCoordinate
+        parameters:
+          ascending: True
+          correction: "Coordinate data was sorted in order to ensure monotonicity."
+    variables:
+      - COORDS
+
+  #---------------------------------------------------------------
+  manage_missing_values:
+    checker:
+      classname: tsdat.qc.checkers.CheckMissing
+    handlers:
+      - classname: tsdat.qc.handlers.RemoveFailedValues
+      - classname: tsdat.qc.handlers.RecordQualityResults
+        parameters:
+          bit: 1
+          assessment: Bad
+          meaning: "Value is equal to _FillValue or NaN"
+    variables:
+      - DATA_VARS
+    exclude: [latitude, longitude, altitude]
+{% if cookiecutter.use_custom_qc == "yes" %}
+  # TODO – Developer: Update this as needed.
+  manage_custom_qc:  # Rename this
+    checker:
+      classname: ingest.{{ cookiecutter.ingest_slug }}.pipeline.qc.CustomQualityChecker
+    handlers:
+      - classname: ingest.{{ cookiecutter.ingest_slug }}.pipeline.qc.CustomQualityHandler{% endif %}
