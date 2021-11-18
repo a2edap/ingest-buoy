@@ -15,5 +15,10 @@ def test_lidar_humboldt_pipeline():
     output = pipeline.run(
         expand("tests/data/input/lidar.z05.00.20201201.000000.sta.7z", parent)
     )
-    expected = xr.open_dataset(expand("tests/data/expected/data.csv", parent))
+    expected = xr.open_dataset(
+        expand(
+            "tests/data/expected/humboldt.buoy_z05-lidar-10m.a1.20201201.001000.nc",
+            parent,
+        )
+    )
     xr.testing.assert_allclose(output, expected)
