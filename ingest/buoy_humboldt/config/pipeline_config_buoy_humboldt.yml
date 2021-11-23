@@ -9,7 +9,7 @@ pipeline:
 
 dataset_definition:
   attributes:
-    title: "Surface Meteorological Measurements and Ocean Current Measurements from Buoy #130 at Humboldt, CA"
+    title: "Surface Meteorological Measurements and Ocean Current Measurements from Buoy #120 at Humboldt, CA"
     description:
       "Pacific Northwest National Laboratory (PNNL) manages this AXYS WindSentinelTM buoy (Buoy #120) on
       behalf of the U.S. Department of Energy (DOE) that collect a comprehensive set of meteorological and oceanographic
