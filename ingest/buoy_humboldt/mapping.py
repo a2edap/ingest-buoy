@@ -14,7 +14,7 @@ mapping: Dict["AnyStr@compile", IngestSpec] = {
         name="buoy_humboldt",
     ),
     # Mapping for Processed Data -> Ingest (so we can reprocess plots)
-    re.compile(r".*/buoy\.z06\.a0\.\d{8}\.\d{6}\.10m\.a2e\.nc"): IngestSpec(
+    re.compile(r".*/buoy\.z05\.a0\.\d{8}\.\d{6}\.10m\.a2e\.nc"): IngestSpec(
         pipeline=Pipeline,
         pipeline_config=expand("config/pipeline_config_buoy_humboldt.yml", __file__),
         storage_config=expand("config/storage_config_buoy_humboldt.yml", __file__),

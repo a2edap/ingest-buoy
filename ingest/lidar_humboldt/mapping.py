@@ -14,7 +14,7 @@ mapping: Dict["AnyStr@compile", IngestSpec] = {
         name="lidar_humboldt",
     ),
     # Mapping for Processed Data -> Ingest (so we can reprocess plots)
-    re.compile(r"YOUR-REGEX-HERE"): IngestSpec(
+    re.compile(r".*/lidar\.z05\.a0\.\d{8}\.\d{6}\.sta\.a2e\.nc"): IngestSpec(
         pipeline=Pipeline,
         pipeline_config=expand("config/pipeline_config_lidar_humboldt.yml", __file__),
         storage_config=expand("config/storage_config_lidar_humboldt.yml", __file__),
