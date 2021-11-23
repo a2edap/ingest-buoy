@@ -1,6 +1,6 @@
-# IMU Ingest at Morro Bay, CA
+# IMU Ingest at Humboldt, CA
 
-Ingest of IMU data from an AXYS Technologies buoy stationed in Morro Bay, CA.
+Ingest of IMU data from an AXYS Technologies buoy stationed off the coast of Humboldt, CA.
 
 Writen by [Maxwell Levin](mailto:maxwell.levin@pnnl.gov)
 
