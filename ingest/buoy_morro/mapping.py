@@ -7,7 +7,7 @@ from . import Pipeline
 
 mapping: Dict["AnyStr@compile", IngestSpec] = {
     # Mapping for Raw Data -> Ingest
-    re.compile(r".*/buoy\.z06\.00\.\d{8}\.\d{8}\.zip"): IngestSpec(
+    re.compile(r".*/buoy\.z06\.00\.\d{8}\.\d{6}\.zip"): IngestSpec(
         pipeline=Pipeline,
         pipeline_config=expand("config/pipeline_config_buoy_morro.yml", __file__),
         storage_config=expand("config/storage_config_buoy_morro.yml", __file__),

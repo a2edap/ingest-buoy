@@ -7,7 +7,7 @@ from . import Pipeline
 
 mapping: Dict["AnyStr@compile", IngestSpec] = {
     # Mapping for Raw Data -> Ingest
-    re.compile(r".*/buoy\.z05\.00\.\d{8}\.\d{8}\.imu\.bin"): IngestSpec(
+    re.compile(r".*/buoy\.z05\.00\.\d{8}\.\d{6}\.imu\.bin"): IngestSpec(
         pipeline=Pipeline,
         pipeline_config=expand("config/pipeline_config_imu_humboldt.yml", __file__),
         storage_config=expand("config/storage_config_imu_humboldt.yml", __file__),
