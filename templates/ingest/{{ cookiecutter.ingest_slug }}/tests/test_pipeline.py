@@ -1,6 +1,6 @@
 import os
 import xarray as xr
-from utils import expand, set_dev_env
+from utils import expand, set_env
 from ingest.{{ cookiecutter.ingest_slug }} import Pipeline
 
 parent = os.path.dirname(__file__)
@@ -8,7 +8,7 @@ parent = os.path.dirname(__file__)
 
 # TODO – Developer: Update paths to your input files here. Please add tests if needed.
 def test_{{ cookiecutter.ingest_slug }}_pipeline():
-    set_dev_env()
+    set_env()
     pipeline = Pipeline(
         expand("config/pipeline_config_{{ cookiecutter.ingest_slug }}.yml", parent),
         expand("config/storage_config_{{ cookiecutter.ingest_slug }}.yml", parent),

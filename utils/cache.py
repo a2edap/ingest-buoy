@@ -1,15 +1,18 @@
 import pkgutil
 import importlib
+import logging
 
 from tsdat.io import S3Path
 from typing import AnyStr, Dict, List, Union
 from .specification import IngestSpec
 
+logger = logging.getLogger(__name__)
+
 
 class PipelineCache:
     """----------------------------------------------------------------------------
-    Utility class to discover and cache `IngestPipeline` classes and the
-    configuration specifications needed to instatiate them later.
+    Utility class to discover and cache `A2ePipeline` classes and the configuration
+    specifications needed to instatiate them later.
 
     ----------------------------------------------------------------------------"""
 
@@ -25,7 +28,7 @@ class PipelineCache:
 
 
         Args:
-            parent_module (str, optional): The module (relative to the repository root
+            parent_module (str, optional): The module (relative to the "ingest-awaken"
             folder) under which individual ingests live. Defaults to "ingest".
 
         ----------------------------------------------------------------------------"""
@@ -36,10 +39,11 @@ class PipelineCache:
             mappings: Dict["AnyStr@compile", IngestSpec] = ingest_module.mapping
             for regex, specification in mappings.items():
                 self._register(regex, specification)
+        logger.debug("Discovered ingest modules: %s", self._modules)
 
     def match_filepath(self, input_files: Union[List[S3Path], List[str]]) -> IngestSpec:
         """----------------------------------------------------------------------------
-        Matches the provided files to a registered `IngestPipeline` and cached
+        Matches the provided files to a registered `A2ePipeline` and cached
         configuration parameters.
 
         Note that if multiple files are passed together, it is assummed that they must
@@ -53,7 +57,7 @@ class PipelineCache:
 
         Returns:
             IngestSpec: The specifications needed to instantiate the appropriate
-            `IngestPipeline` pipeline for the provided inputs.
+            `A2ePipeline` pipeline for the provided inputs.
 
         ----------------------------------------------------------------------------"""
         query_filepath = input_files[0].__str__()
@@ -68,7 +72,7 @@ class PipelineCache:
         """----------------------------------------------------------------------------
         Adds a compiled regex pattern to the internal cache. The regex helps to map
         files matching a specific pattern to a specific set of pipeline and storage
-        configurations for a non-instantiated IngestPipeline class.
+        configurations for a non-instantiated A2ePipeline class.
 
         See https://docs.python.org/3.8/howto/regex.html for more information on Python
         regexes.
@@ -76,12 +80,12 @@ class PipelineCache:
         Args:
             regex (AnyStr): A compiled regex pattern which should match files to
             process. This is typically created by `re.compile(...)`.
-            pipeline_cls (IngestPipeline): The `IngestPipeline` class to associate with
-            the regex pattern. *Must not be an instance of a class*.
+            pipeline_cls (A2ePipeline): The `A2ePipeline` class to associate with the
+            regex pattern. *Must not be an instance of a class*
             pipeline_config (str): The full path to the pipeline configuration file to
-            instantiate the `IngestPipeline` with.
+            instantiate the `A2ePipeline` with.
             storage_config (str): The full path to the storage configuration file to
-            instantiate the `IngestPipeline` with.
+            instantiate the `A2ePipeline` with.
 
         ----------------------------------------------------------------------------"""
         assert regex not in self._cache
@@ -104,6 +108,9 @@ class PipelineCache:
         matches: List[str] = [
             regex for regex in self._cache.keys() if regex.match(filepath)
         ]
-        # TODO: Probably helpful to distinguish 0 matches from >1 matches
-        assert len(matches) == 1
+        if len(matches) != 1:
+            raise ValueError(
+                f"Unexpected number of matches for file '{filepath}':\n"
+                f"matches={matches}"
+            )
         return matches[0]

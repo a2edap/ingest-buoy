@@ -2,9 +2,13 @@
 # method (Pipeline.run(...) vs Pipeline.run_plots(...)) based on mapping – if "plots"
 # is part of the IngestSpec.name string then dispatch to _run_plots()
 
+import logging
 from tsdat.io import S3Path
 from typing import List, Union
 from .cache import PipelineCache
+
+
+logger = logging.getLogger(__name__)
 
 
 class PipelineDispatcher:
@@ -13,8 +17,8 @@ class PipelineDispatcher:
 
     def dispatch(self, input_files: Union[List[S3Path], List[str]]) -> bool:
         """----------------------------------------------------------------------------
-        Instantiates the appropriate `IngestPipeline` for the provided input files and
-        calls either the `IngestPipeline.run()` or `IngestPipeline.run_plots()` method
+        Instantiates the appropriate `A2ePipeline` for the provided input files and
+        calls either the `A2ePipeline.run()` or `A2ePipeline.run_plots()` method
         according to the ingest's `mapping` specifications.
 
         Args:
@@ -27,15 +31,10 @@ class PipelineDispatcher:
             error, False otherwise.
 
         ----------------------------------------------------------------------------"""
+        if not isinstance(input_files, List):
+            input_files = [input_files]
 
-        specification = self._cache.match_filepath(input_files)
-
-        if "plot" in specification.name:
-            return self._run_plots(input_files)
-
-        return self._run_pipeline(input_files)
-
-    def _run_pipeline(self, input_files: Union[List[S3Path], List[str]]) -> bool:
+        status = True
 
         # TODO: Catch possible exceptions:
         # AssertionError – no regex match, or too many matches`
@@ -46,25 +45,12 @@ class PipelineDispatcher:
         try:
             specification = self._cache.match_filepath(input_files)
             pipeline = specification.instantiate()
-            pipeline.run(input_files)
+            if "plot" in specification.name:
+                pipeline.run_plots(input_files)
+            else:
+                pipeline.run(input_files)
         except BaseException:
-            return False
+            logger.exception("Pipeline failed on input files: %s", input_files)
+            status = False
 
-        return True
-
-    def _run_plots(self, input_files: Union[List[S3Path], List[str]]) -> bool:
-
-        # TODO: Catch possible exceptions:
-        # AssertionError – no regex match, or too many matches
-        # FileNotFoundError – bad config file path or data file path
-        # DefinitionError – a config file not defined correctly.
-        # QCError – pipeline failed because of poor data quality – manual intervention
-        # BaseException – any other error: catch, report, and carry on.
-        try:
-            specification = self._cache.match_filepath(input_files)
-            pipeline = specification.instantiate()
-            pipeline.run_plots(input_files)
-        except BaseException:
-            return False
-
-        return True
+        return status

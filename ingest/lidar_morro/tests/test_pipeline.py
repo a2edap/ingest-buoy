@@ -1,13 +1,13 @@
 import os
 import xarray as xr
-from utils import expand, set_dev_env
+from utils import expand, set_env
 from ingest.lidar_morro import Pipeline
 
 parent = os.path.dirname(__file__)
 
 
 def test_lidar_morro_pipeline():
-    set_dev_env()
+    set_env()
     pipeline = Pipeline(
         expand("config/pipeline_config_lidar_morro.yml", parent),
         expand("config/storage_config_lidar_morro.yml", parent),
