@@ -126,9 +126,9 @@ dataset_definition:
       input:
         name: current_speed
         file_pattern: "currents"
+        requred: True
         units: mm/s
       dims: [depth, time]
-      type: double
       attrs:
         long_name: Current Speed
         units: m/s
@@ -141,8 +141,8 @@ dataset_definition:
       input:
         name: current_direction
         file_pattern: "currents"
+        requred: True
       dims: [depth, time]
-      type: double
       attrs:
         long_name: Current Direction
         units: degrees
