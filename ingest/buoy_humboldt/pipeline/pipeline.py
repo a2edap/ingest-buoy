@@ -1,5 +1,4 @@
 import os
-import cmocean
 import numpy as np
 import xarray as xr
 import pandas as pd
@@ -57,20 +56,24 @@ class Pipeline(IngestPipeline):
                     i += 1
 
                 depth = np.array(depth)
-                vel_data = np.array(vel_data).transpose()
-                dir_data = np.array(dir_data).transpose()
+                vel_data = np.array(vel_data)
+                dir_data = np.array(dir_data)
 
                 # Make time.input.name and depth coordinate variables
                 dataset = dataset.set_coords(time_def.get_input_name())
-                dataset["depth"] = xr.DataArray(data=depth, dims=["depth"])
+                dataset["depth"] = (
+                    xr.DataArray(data=depth, dims=["depth"])
+                    + dataset.BlankingDistance.median()
+                    + dataset.HeadDepth.median()
+                )
                 dataset = dataset.set_coords("depth")
 
                 # Add current velocity and direction data to dataset
                 dataset["current_speed"] = xr.DataArray(
-                    data=vel_data, dims=["time", "depth"]
+                    data=vel_data, dims=["depth", "time"]
                 )
                 dataset["current_direction"] = xr.DataArray(
-                    data=dir_data, dims=["time", "depth"]
+                    data=dir_data, dims=["depth", "time"]
                 )
 
                 raw_dataset_mapping[filename] = dataset
@@ -215,43 +218,41 @@ class Pipeline(IngestPipeline):
             # Create the third plot - current velocities
             filename = DSUtil.get_plot_filename(dataset, "current_velocity", "png")
             with self.storage._tmp.get_temp_filepath(filename) as tmp_path:
+                # Reduce dimensionality of dataset for plotting
+                # ds_1H: xr.Dataset = ds.reindex({"depth": ds.depth.data[::2]})
+                # ds_1H: xr.Dataset = ds_1H.resample(time="1H").nearest()
 
-                ds_1H: xr.Dataset = ds.reindex({"depth": ds.depth.data[::2]})
-                ds_1H: xr.Dataset = ds_1H.resample(time="1H").nearest()
-
-                # Calculate U&V components of wind vector for a subset of data
-                idx = slice(1, None)
-                qv_degrees = ds_1H.current_direction.data[idx, idx].transpose()
-                qv_theta = (qv_degrees + 90) * (np.pi / 180)
-                X, Y = ds_1H.time.data[idx], ds_1H.depth.data[idx]
-                U, V = np.cos(-qv_theta), np.sin(-qv_theta)
-
-                fig, ax = plt.subplots()
-                csf = ds.current_speed.plot.contourf(
-                    ax=ax,
-                    x="time",
-                    yincrease=False,
-                    levels=30,
-                    cmap=cmocean.cm.deep_r,
-                    add_colorbar=False,
+                # Create the figure and axes objects
+                fig, ax = plt.subplots(
+                    nrows=2, ncols=1, figsize=(14, 8), constrained_layout=True
                 )
-                ax.quiver(
-                    X,
-                    Y,
-                    U,
-                    V,
-                    width=0.002,
-                    scale=60,
-                    color="white",
-                    pivot="middle",
-                    zorder=10,
+                fig.suptitle(
+                    f"Current Speed and Direction at {ds.attrs['location_meaning']} on {date}"
                 )
+                date = pd.to_datetime(ds["time"].values)
+                magn = ax[0].pcolormesh(
+                    date,
+                    -ds["depth"],
+                    ds["current_speed"],
+                    cmap="Blues",
+                    shading="nearest",
+                )
+                ax[0].set_xlabel("Time (UTC)")
+                ax[0].set_ylabel(r"Range [m]")
+                format_time_xticks(ax[0])
+                add_colorbar(ax[0], magn, r"Current Speed (m s$^{-1}$)")
 
-                fig.suptitle(f"Current Speed and Direction at {loc} on {date}")
-                add_colorbar(ax, csf, r"Current Speed (mm s$^{-1}$)")
-                format_time_xticks(ax)
-                ax.set_xlabel("Time (UTC)")
-                ax.set_ylabel("Depth (m)")
+                dirc = ax[1].pcolormesh(
+                    date,
+                    -ds["depth"],
+                    ds["current_direction"],
+                    cmap="twilight",
+                    shading="nearest",
+                )
+                ax[1].set_xlabel("Time (UTC)")
+                ax[1].set_ylabel(r"Depth [m]")
+                format_time_xticks(ax[1])
+                add_colorbar(ax[1], dirc, r"Direction [deg from N]")
 
                 fig.savefig(tmp_path)
                 self.storage.save(tmp_path)
