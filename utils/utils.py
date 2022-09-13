@@ -1,13 +1,9 @@
-import os
 import matplotlib as mpl
+from matplotlib.colorbar import Colorbar
 import matplotlib.pyplot as plt
 from typing import Any
 
-
-def expand(relpath: str, invocation_file: str) -> str:
-    cwd = os.path.dirname(invocation_file)
-    path = os.path.join(cwd, relpath)
-    return os.path.realpath(path)
+__all__ = ["format_time_xticks", "add_colorbar"]
 
 
 def format_time_xticks(
@@ -34,12 +30,12 @@ def format_time_xticks(
         to "%H-%M".
 
     ----------------------------------------------------------------------------"""
-    ax.xaxis.set_major_locator(mpl.dates.HourLocator(byhour=range(start, stop, step)))
-    ax.xaxis.set_major_formatter(mpl.dates.DateFormatter(date_format))
+    ax.xaxis.set_major_locator(mpl.dates.HourLocator(byhour=range(start, stop, step)))  # type: ignore
+    ax.xaxis.set_major_formatter(mpl.dates.DateFormatter(date_format))  # type: ignore
     plt.setp(ax.xaxis.get_majorticklabels(), rotation=0)
 
 
-def add_colorbar(ax: plt.Axes, plot: Any, label: str = "") -> plt.colorbar:
+def add_colorbar(ax: plt.Axes, plot: Any, label: str = "") -> Colorbar:
     """----------------------------------------------------------------------------
     Adds a colorbar to the provided `plt.Axes` object and sets its label. Returns
     the colorbar handle when done.
@@ -52,7 +48,7 @@ def add_colorbar(ax: plt.Axes, plot: Any, label: str = "") -> plt.colorbar:
         label (str): The label to use for the colorbar. Defaults to "".
 
     Returns:
-        plt.colorbar: The colorbar object.
+        Colorbar: The colorbar object.
 
     ----------------------------------------------------------------------------"""
     cb = plt.colorbar(plot, ax=ax, pad=0.01)

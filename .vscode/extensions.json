@@ -4,9 +4,8 @@
         "ms-python.vscode-pylance",
         "njpwerner.autodocstring",
         "eamodio.gitlens",
-        "GitHub.vscode-pull-request-github",
         "Gruntfuggly.todo-tree",
-        "ms-vscode-remote.vscode-remote-extensionpack",
+        "usernamehw.errorlens",
         "yy0931.mplstyle",
         "redhat.vscode-yaml",
     ]

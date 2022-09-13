@@ -1,0 +1,161 @@
+attrs:
+  title: "Metocean Buoy Pipeline"
+  description: "Ingest of metocean data from an AXYS Technologies buoy."
+  location_id: morro
+  location_meaning: "Morro Bay, CA"
+  dataset_name: buoy_z06
+  data_level: a1
+  qualifier: metocean
+  temporal: 10m
+  instrument_manufacturer: "AXYS Technologies Inc."
+  instrument_name: "WindSentinel"
+
+coords:
+  time:
+    dims: [time]
+    dtype: datetime64[s]
+    attrs:
+      units: Seconds since 1970-01-01 00:00:00
+
+  depth:
+    dims: [depth]
+    dtype: long
+    attrs:
+      long_name: Depth
+      units: m
+
+data_vars:
+  sea_surface_temperature_CTD:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Sea surface temperature
+      units: degC
+      valid_min: -5
+      valid_max: 50
+
+  conductivity:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Ocean Conductivity
+      units: S/m
+      valid_max: 7
+
+  # This is a computed value, but the computation is now done in
+  # the reader prior to dataset standardization, so it is considered
+  # to have input.
+  current_speed:
+    dtype: float
+    dims: [depth, time]
+    attrs:
+      long_name: Current Speed
+      units: m/s
+      valid_max: 5
+
+  # This is a computed value, but the computation is now done in
+  # the reader prior to dataset standardization, so it is considered
+  # to have input.
+  current_direction:
+    dtype: float
+    dims: [depth, time]
+    attrs:
+      long_name: Current Direction
+      units: degrees
+      valid_max: 360
+
+  wind_speed_gill:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Horizontal Wind Speed
+      comment: Surface horizontal wind speed, 2D ultrasonic anemometer
+      units: m/s
+      valid_max: 50
+
+  wind_direction_gill:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Horizontal Wind Direction
+      comment: Surface horizontal wind direction, 2D ultrasonic anemometer
+      units: degrees
+      valid_max: 360
+
+  wind_speed:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Horizontal Wind Speed
+      comment: Surface wind speed, cup anemometer
+      units: m/s
+      valid_max: 50
+
+  wind_direction:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Horizontal Wind Direction
+      comment: Surface wind direction, wind vane
+      units: degrees
+      valid_max: 360
+
+  pressure:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Atmospheric Pressure
+      units: hPa
+
+  solar_radiation:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Solar Radiation
+      units: (W/m^2)
+
+  relative_humidity:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Relative Humidity
+      units: "%"
+      valid_max: 100
+
+  # Note that this variable had the same name as Surface Temperature from
+  # conductivity csv. It has been renamed to prevent a conflict, but the
+  # user will need to write the customize_raw_dataset() hook to rename the
+  # raw input from "Surface Temperature (C)" to "surfacetemp - Surface
+  # Temperature (C)" so that the code can still retrieve it properly
+  sea_surface_temperature_YSI:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Sea Surface Temperature
+      comment: This is from the surfacetemp.csv file.
+      units: degC
+      valid_min: -5
+      valid_max: 50
+
+  air_temperature:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Air Temperature
+      units: degC
+      valid_min: -40
+      valid_max: 60
+
+  latitude:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Latitude
+      units: degree_N
+
+  longitude:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Longitude
+      units: degree_E

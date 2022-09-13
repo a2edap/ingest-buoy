@@ -1,0 +1,20 @@
+# Conda environment for developing tsdat pipelines
+
+name: tsdat-pipelines
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+  - act-atmos
+  - pip:
+      - tsdat >=0.4.0, <0.5.0
+      - cmocean
+      - cookiecutter==1.7.3
+      - pytest
+      - coverage
+      - mypy
+      - black
+      - isort
+      - notebook

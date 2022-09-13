@@ -1,0 +1,15 @@
+classname: pipelines.lidar.pipeline.Lidar
+
+triggers:
+  - .*lidar.z06.*\.sta.7z
+
+retriever:
+  path: pipelines/lidar/config/retriever.yaml
+
+dataset:
+  path: pipelines/lidar/config/dataset.yaml
+
+quality:
+  path: shared/quality.yaml
+storage:
+  path: shared/storage.yaml

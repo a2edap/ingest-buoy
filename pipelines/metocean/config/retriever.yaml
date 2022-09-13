@@ -1,0 +1,83 @@
+classname: tsdat.io.retrievers.DefaultRetriever
+readers:
+  .*:
+    classname: tsdat.io.readers.ZipReader
+    parameters:
+      readers:
+        buoy:
+          classname: pipelines.metocean.readers.BuoyReader
+
+coords:
+  time:
+    name: DataTimeStamp
+    data_converters:
+      - classname: tsdat.io.converters.StringToDatetime
+        format: "%Y-%m-%d %H:%M:%S"
+        timezone: UTC
+
+data_vars:
+  sea_surface_temperature_CTD:
+    .*conductivity\.csv:
+      name: "Surface Temperature (C)"
+
+  conductivity:
+    .*conductivity\.csv:
+      name: "Conductivity (Siemens/m)"
+
+  current_speed:
+    .*currents\.csv:
+      name: current_speed
+      data_converters:
+        - classname: tsdat.io.converters.UnitsConverter
+          input_units: mm/s
+
+  current_direction:
+    .*currents\.csv:
+      name: current_direction
+
+  wind_speed_gill:
+    .*gill\.csv:
+      name: "Horizontal Speed (m/s)"
+
+  wind_direction_gill:
+    .*gill\.csv:
+      name: "Horizontal Direction (deg)"
+
+  wind_speed:
+    .*wind\.csv:
+      name: Horizontal Speed (m/s)
+
+  wind_direction:
+    .*wind\.csv:
+      name: Horizontal Direction (deg)
+
+  pressure:
+    .*pressure\.csv:
+      name: Barometric Pressure (mb)
+      data_converters:
+        - classname: tsdat.io.converters.UnitsConverter
+          input_units: mbar
+
+  solar_radiation:
+    .*pyranometer\.csv:
+      name: Solar Radiation (W/m^2)
+
+  relative_humidity:
+    .*rh\.csv:
+      name: Relative Humidity (%)
+
+  sea_surface_temperature_YSI:
+    .*surfacetemp\.csv:
+      name: Surface Temperature (C)
+
+  air_temperature:
+    .*temperature\.csv:
+      name: Air Temperature (C)
+
+  latitude:
+    .*gps\.csv:
+      name: Latitude
+
+  longitude:
+    .*gps\.csv:
+      name: Longitude

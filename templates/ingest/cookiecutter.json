@@ -1,17 +1,20 @@
 {
-    "author": "First Last",
-    "email": "",
-    "location": "Location",
-    "location_slug": "{{ cookiecutter.location | slugify(separator='_') }}",
-    "ingest": "Ingest Name",
-    "ingest_slug": "{{ cookiecutter.ingest | slugify(separator='_') }}_{{ cookiecutter.location_slug }}",
-    "description": "description",
-    "use_custom_filehandler": [
+    "ingest_name": "Name of the Ingest",
+    "ingest_location": "Location",
+    "ingest_description": "Brief description of the ingest",
+    "use_custom_data_reader": [
+        "no",
+        "yes"
+    ],
+    "use_custom_data_converter": [
         "no",
         "yes"
     ],
     "use_custom_qc": [
         "no",
         "yes"
-    ]
+    ],
+    "module": "{{ cookiecutter.ingest_name | slugify(separator='_') }}",
+    "classname": "{{ cookiecutter.module | replace('_', ' ') | title | replace(' ', '') }}",
+    "location_id": "{{ cookiecutter.ingest_location | slugify(separator='_') }}"
 }

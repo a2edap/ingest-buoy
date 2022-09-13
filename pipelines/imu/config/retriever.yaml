@@ -1,0 +1,38 @@
+classname: tsdat.io.retrievers.DefaultRetriever
+readers:
+  .*:
+    classname: pipelines.imu.readers.IMUDataReader
+
+coords:
+  time:
+    name: time
+  direction:
+    name: space
+
+data_vars:
+  roll:
+    name: roll
+    data_converters:
+      - classname: tsdat.io.converters.UnitsConverter
+        input_units: radians
+  pitch:
+    name: pitch
+    data_converters:
+      - classname: tsdat.io.converters.UnitsConverter
+        input_units: radians
+  yaw:
+    name: yaw
+    data_converters:
+      - classname: tsdat.io.converters.UnitsConverter
+        input_units: radians
+  angular_velocity:
+    name: gyro
+    data_converters:
+      - classname: tsdat.io.converters.UnitsConverter
+        input_units: radians
+  acceleration:
+    name: accel
+  magnetic_field:
+    name: mag
+  pressure:
+    name: pres

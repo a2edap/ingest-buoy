@@ -1,102 +1,163 @@
-# INGEST-BUOY
+# Tsdat Pipeline Template
 
+[![tests](https://github.com/tsdat/pipeline-template/actions/workflows/tests.yml/badge.svg)](https://github.com/tsdat/pipeline-template/actions/workflows/tests.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![tests](https://github.com/tsdat/ingest-template/actions/workflows/tests.yml/badge.svg)](https://github.com/tsdat/ingest-template/actions/workflows/tests.yml)
 
-This repository helps provide a way to group similar `tsdat` ingest scripts in the same
-repository so that they can be more easily maintained and deployed on input files. It
-has been adapted to run various ingest scripts for the [Atmosphere to Electrons BUOY
-project](https://a2e.energy.gov/projects/buoy).
+This repository contains a collection of one or more `tsdat` pipelines (as found under the ``pipelines`` folder).  This
+enables related pipelines to be more easily maintained and run together.  New pipelines can be added easily via 
+the template mechanism described below.
+
+## Repository Structure
+
+The repository is made up of the following core pieces:
+
+- **`runner.py`**: Main entry point for running a pipeline.
+
+- **`pipelines/*`**: Collection of custom data pipelines using `tsdat`.
+
+- **`pipelines/example_ingest`**: An out-of-the-box example `tsdat` pipeline.
+
+- **`templates/*`**: Template(s) used to generate new pipelines.
+
+- **`shared/*`**: Shared configuration files that may be used across multiple pipelines.
+
+- **`utils/*`**: Utility scripts.
+
+## Prerequisites
+
+The following are required to develop a `tsdat` pipeline:
+1. **A GitHub account.** [Click here to create an account if you don't have one already](https://github.com/)
 
 
-## How it works
+2. **An Anaconda environment.**  We strongly recommend developing in an Anaconda Python environment to ensure
+that there are no library dependency issues.  [Click here for more information on installing Anaconda on your computer](https://docs.anaconda.com/anaconda/install/index.html)
 
-- **`runner.py`**: Top-level CLI to run the appropriate ingest on one or more files.
-Run `python runner.py --help` to see the full list of commands it offers.
-- **`ingest/*`**: collection of python modules, each of which is a self-describing and
-self-contained ingest. Every ingest module exports the necessary information for the
-`runner` or higher-level processes to instantiate and run the ingest.
-- **`tests/*`**: tests performed on all ingests. Note that individual ingests also define
-their own tests, so this folder is primarily used for high-level sanity checks.
-- **`utils/*`**: utility methods and classes used throughout the project. This folder
-will be updated as needed to allow ingests to leverage common project-specific tools.
-- **`.devcontainer/*`, `.vscode/*`, `*docker*`**: Configurations to simplify and
-development environment setup.
-- **`.github/*`**: Workflows and templates to ensure code is well-tested and issues are
-tracked appropriately.
+    > **Windows Users** - You can install Anaconda directly to your Windows box OR you can run via a linux
+    environment using the Windows Subsystem for Linux (WSL).  See
+    [this tutorial on WSL](https://tsdat.readthedocs.io/en/latest/tutorials/setup_wsl.html) for
+    how to set up a WSL environment and attach VS Code to it.
 
+
+## Creating a repository from the pipeline-template
+You can create a new repository based upon the `tsdat` pipeline-template repository in GitHub:
+
+1. Click this '[Use this template](https://github.com/tsdat/pipeline-template/generate)' link and
+follow the steps to copy the template repository into to your account.
+    > **NOTE:** If you are looking to get an older version of the template, you will need to
+    select the box next to 'Include all branches' and set the branch your are interested
+    in as your new default branch.
+
+2. On github click the 'Code' button to get a link to your code, then run 
+    ```
+    git clone <the link you copied>
+    ```
+    from the terminal on your computer where you would like to work on the code.
+
+## Setting up your Anaconda environment
+1. Open a terminal shell from your computer
+   - If you are on Linux or Mac, just open a regular terminal
+   - If you are on Windows, start your Anaconda prompt if you installed Anaconda directly
+   to Windows, OR open a WSL terminal if you installed Anaconda via WSL.
+
+2. Run the following commands to create and activate your conda environment:
+
+    ```bash
+    conda env create --file=conda-environment.yaml
+    conda activate tsdat-pipelines
+    ```
+
+3. Verify your environment is set up correctly by running the tests for this repository:
+    ```bash
+    pytest
+    ```
+
+    If you get the following warning message when running the test:
+    ```bash
+    UserWarning: pyproj unable to set database path.
+    ```
+
+    Then run the following additional commands to permanently remove this warning message:
+    ```bash
+    conda remove --force pyproj
+    pip install pyproj
+    ```
+
+    If everything is set up correctly then all the tests should pass.
+
+## Opening your repository in VS Code
+
+1. Open the cloned repository in VS Code. *(This repository contains default settings for
+VS Code that will make it much easier to get started quickly.)*
+
+2. Install the recommended extensions (there should be a pop-up in VS Code with recommendations).
+
+3. Tell VS Code to use your new conda environment:
+    - Press `F1` to bring up the command pane in VS Code
+    - Type `Python: Select Interpreter` and select it.
+    - Select the newly-created `tsdat-pipelines` conda environment from the drop-down list.
+        > You may need to refresh the list (cycle icon in the top right) to see it.
+    - Bring up the command pane and type `Developer: Reload Window` to reload VS Code
+    and ensure the settings changes propagate correctly.
+
+4. Verify your VS Code environment is set up correctly by running the tests for this repository:
+    - Press `F1` to bring up the command pane in VS Code
+    - Type `Test: Run All Tests` and select it
+    - A new window pane will show up on the left of VS Code showing test status
+    - Verify that all tests have passed (Green check marks)
+
+
+## Processing Data
+
+- The `runner.py` script can be run from the command line to process input data files:
+    ```
+    python runner.py <path(s) to file(s) to process>
+    ```
+    > The pipeline(s) used to process the data will depend on the specific patterns declared
+    by the `pipeline.yaml` files in each pipeline module in this repository.
+
+- You can run the example pipeline that comes bundled with this repository by running:
+    ```
+    python runner.py pipelines/example_pipeline/test/data/input/buoy.z06.00.20201201.000000.waves.csv
+    ```
+
+    If goes successfully it should output some text, ending with the line:
+    ```
+    Processing completed with 1 successes, 0 failures, and 0 skipped.
+    ```
+
+
+- The `runner.py` script can optionally take a glob pattern in addition to a filepath. E.g.,
+to process all 'csv' files in some input folder `data/to/process/` you would run:
+    ```
+    python runner.py data/to/process/*.csv
+    ```
+
+- The `--help` option can be used to show additional usage information:
+    ```
+    python runner.py --help
+    ```
 
 ## Adding a new pipeline
 
-Developers should follow the following five-step process to create a new ingest
-pipeline.
+1. Ensure your development environment is set up according to the instructions above
 
-1. Clone or fork this repository to your development area
-2. Set up your development environment according to the instructions below.
-3. Run `> pytest` to ensure that tests pass (validate your setup)
-4. Run `> cookiecutter templates/ingest -o ingest/` to generate your own ingest.
-5. Follow the steps outlined in the generated ingest README to modify the generated ingest code.
-6. Test your changes, then push back up to your remote repository.
+2. Use a cookiecutter template to generate a new pipeline folder.  From your top level repository folder, run:
 
-This repository supports adding as many ingests as you want. Just follow steps 3-6 for
-each new ingest you want to add.
-
-
-## Development environment setup
-
-This section outlines how to set up the recommended development environment for this
-project.
-
-
-1. Download and install [VS Code](https://code.visualstudio.com). Make sure to add 
-`code` to your path if prompted.
-
-    We chose VS Code because of its clean user interface, quick startup time, extremely
-    powerful capabilities out-of-box, and its rich library of open source extensions.
-
-2. Clone your fork of this repository to your laptop and open it up in VS Code
-
-3. The first time you open this project in VS Code you will be prompted to install the
-recommended extensions. Please do so now.
-
-4. **Windows users**: We recommend using
-[Docker](https://www.docker.com/products/docker-desktop) to manage dependencies for
-this project. If you choose to use Docker follow the steps below:
-    - Press `F1` (or `ctrl-shift-p`) to bring up the command pane in VS Code
-    - In the command pane, type: `Remote-Containers: Open Folder in Container...` and
-    hit `return`
-    - You will be prompted to specify which folder should be opened. Select the folder
-    containing this `README` file
-    - Several dialog boxes may appear while the VS Code window is refreshing. Please
-    install the recommended extensions via the dialog box. An additional dialog box
-    should appear asking you to reload the window so Pylance can take effect. Please do
-    this as well.
-    - After the window refreshes your development environment will be set up correctly.
-    You may skip steps 5. and 6.
-
-    You can find more information about VS Code and docker containers
-    [here](https://code.visualstudio.com/docs/remote/containers).
-
-5. We highly recommend using [conda](https://docs.anaconda.com/anaconda/install/) to
-manage dependencies in your development environment. Please install this using the link
-above if you haven't already done so. Then run the following commands to create your
-environment:
-    
     ```bash
-    $ conda create --name ingest python=3.8
-    $ conda activate ingest
-    (ingest) $ pip install -r requirements-dev.txt
+    make cookies
     ```
+    Cookiecutter will show some text in the prompts. More information on these prompts
+    can be found in the [template README.md](templates/ingest/README.md)
 
-6. Tell VS Code to use your new `conda` environment:
-    - Press `F1` (or `ctrl-shift-p`) to bring up the command pane in VS Code
-    - In the command pane, type: `Python: Select Interpreter` and hit `return`
-    - Select the newly-created `ingest` conda environment from the list. Note
-    that you may need to refresh the list (cycle icon in the top right) for it to show
-    up.
-    - Reload the VS Code window to ensure that this setting propagates correctly.
-    This is probably not needed, but doesn't hurt. To do this, press `F1` to open
-    the control pane again and type `Developer: Reload Window`.
+    > The `make cookies` command is a memorable shortcut for `cookiecutter templates/ingest -o pipelines`
+
+
+3. Once cookiecutter is done you will see your new pipeline folder appear inside
+`pipelines/`. Please see the README.md file inside that folder for more information on
+how to configure, run, test, and debug your pipeline. 
+
+> **This repository supports adding as many pipelines as you want - just rinse and repeat the steps above.**
+
 
 ## Additional resources
 
@@ -107,6 +168,9 @@ environment:
 - Learn more about `xarray`: 
     - GitHub: https://github.com/pydata/xarray
     - Documentation: https://xarray.pydata.org
+- Learn more about 'pydantic':
+    - GitHub: https://github.com/samuelcolvin/pydantic/
+    - Documentation: https://pydantic-docs.helpmanual.io
 - Other useful tools:
     - VS Code: https://code.visualstudio.com/docs
     - Docker: https://docs.docker.com/get-started/

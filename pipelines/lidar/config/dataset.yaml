@@ -1,0 +1,126 @@
+attrs:
+  title: "Buoy Lidar Pipeline"
+  description: "Ingest of lidar data from an AXYS Technologies buoy."
+  location_id: morro
+  location_meaning: "Morro Bay, CA"
+  dataset_name: buoy_z06
+  data_level: a1
+  qualifier: lidar
+  temporal: 10m
+  # institution:
+
+coords:
+  time:
+    dims: [time]
+    dtype: datetime64[s]
+    attrs:
+      units: Seconds since 1970-01-01 00:00:00
+
+  height:
+    dims: [height]
+    dtype: int
+    attrs:
+      long_name: Height ASL
+      units: m
+
+data_vars:
+  wind_speed:
+    dims: [height, time]
+    dtype: float
+    attrs:
+      long_name: Wind Speed
+      units: m/s
+      comment: Average wind speed over 10 minute interval
+
+  horizontal_dispersion:
+    dims: [height, time]
+    dtype: float
+    attrs:
+      long_name: Horizontal Dispersion
+      units: m/s
+
+  min_wind_speed:
+    dims: [height, time]
+    dtype: float
+    attrs:
+      long_name: Min Wind Speed
+      units: m/s
+      comment: Minimum wind speed measured during 10 minute interval
+
+  max_wind_speed:
+    dims: [height, time]
+    dtype: float
+    attrs:
+      long_name: Max Wind Speed
+      units: m/s
+      comment: Maximum wind speed measured during 10 minute interval
+
+  wind_direction:
+    dims: [height, time]
+    dtype: float
+    attrs:
+      long_name: Wind Direction
+      units: degrees
+
+  vertical_wind_speed:
+    dims: [height, time]
+    dtype: float
+    attrs:
+      long_name: Vertical Wind Speed
+      units: m/s
+
+  vertical_dispersion:
+    dims: [height, time]
+    dtype: float
+    attrs:
+      long_name: Vertical Dispersion
+      units: m/s
+
+  carrier_noise_ratio:
+    dims: [height, time]
+    dtype: float
+    attrs:
+      long_name: Carrier to Noise Ratio (CNR)
+      units: dB
+
+  doppler_spectral_broadening:
+    dims: [height, time]
+    dtype: float
+    attrs:
+      long_name: Doppler Spectral Broadening
+      units: m/s
+
+  data_availability:
+    dims: [height, time]
+    dtype: float
+    attrs:
+      long_name: Availability
+      units: "%"
+
+  pressure:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Pressure
+      units: hPa
+
+  relative_humidity:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Relative Humidity
+      units: "%"
+
+  internal_temperature:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Internal Temperature
+      units: degC
+
+  air_temperature:
+    dims: [time]
+    dtype: float
+    attrs:
+      long_name: Air Temperature
+      units: degC

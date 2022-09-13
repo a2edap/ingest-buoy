@@ -1,0 +1,44 @@
+classname: tsdat.io.retrievers.DefaultRetriever
+readers:
+  .*:
+    classname: pipelines.lidar.readers.STADataReader
+
+coords:
+  time:
+    name: Timestamp (end of interval)
+    data_converters:
+      - classname: tsdat.io.converters.StringToDatetime
+        format: "%Y-%m-%d %H:%M"
+        timezone: UTC
+  height:
+    name: height
+
+data_vars:
+  wind_speed:
+    name: wind_speed
+  horizontal_dispersion:
+    name: horizontal_dispersion
+  min_wind_speed:
+    name: min_wind_speed
+  max_wind_speed:
+    name: max_wind_speed
+  wind_direction:
+    name: wind_direction
+  vertical_wind_speed:
+    name: vertical_wind_speed
+  vertical_dispersion:
+    name: vertical_dispersion
+  carrier_noise_ratio:
+    name: carrier_noise_ratio
+  doppler_spectral_broadening:
+    name: doppler_spectral_broadening
+  data_availability:
+    name: data_availability
+  pressure:
+    name: Pressure (hPa)
+  relative_humidity:
+    name: Rel Humidity (%)
+  internal_temperature:
+    name: Int Temp (°C)
+  air_temperature:
+    name: Ext Temp (°C)
