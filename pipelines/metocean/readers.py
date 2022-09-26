@@ -67,4 +67,12 @@ class BuoyReader(DataReader):
                 data=dir_data, dims=["depth", "time"]
             )
 
+        # Hack if currents file is missing
+        if "depth" not in ds:
+            ds["depth"] = xr.DataArray(
+                [0, 1, 2],
+                dims=["depth"],
+                attrs={"description": "Placeholder for missing ADCP data"},
+            )
+
         return ds

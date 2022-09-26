@@ -22,7 +22,7 @@ def test_metocean_humboldt():
     pipeline = config.instantiate_pipeline()
 
     test_file = "pipelines/metocean/test/data/input/buoy.z05.00.20201201.000000.zip"
-    expected_file = "storage/root/data/humboldt.buoy_z05-metocean-10m.a1/humboldt.buoy_z05-metocean-10m.a1.20201201.000000.nc"
+    expected_file = "pipelines/metocean/test/data/expected/humboldt.buoy_z05-metocean-10m.a1.20201201.000000.nc"
 
     dataset = pipeline.run([test_file])
     expected: xr.Dataset = xr.open_dataset(expected_file)  # type: ignore
