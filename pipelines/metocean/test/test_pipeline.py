@@ -3,6 +3,7 @@ from pathlib import Path
 from tsdat import PipelineConfig, assert_close
 
 
+# Test missing current file
 def test_metocean_morro():
     config_path = Path("pipelines/metocean/config/pipeline_morro.yaml")
     config = PipelineConfig.from_yaml(config_path)
@@ -16,6 +17,7 @@ def test_metocean_morro():
     assert_close(dataset, expected, check_attrs=False)
 
 
+# Test all files
 def test_metocean_humboldt():
     config_path = Path("pipelines/metocean/config/pipeline_humboldt.yaml")
     config = PipelineConfig.from_yaml(config_path)

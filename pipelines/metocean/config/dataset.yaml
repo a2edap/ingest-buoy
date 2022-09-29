@@ -47,7 +47,7 @@ data_vars:
   # to have input.
   current_speed:
     dtype: float
-    dims: [depth, time]
+    dims: [time, depth]
     attrs:
       long_name: Current Speed
       units: m/s
@@ -58,7 +58,7 @@ data_vars:
   # to have input.
   current_direction:
     dtype: float
-    dims: [depth, time]
+    dims: [time, depth]
     attrs:
       long_name: Current Direction
       units: degrees
@@ -122,11 +122,6 @@ data_vars:
       units: "%"
       valid_max: 100
 
-  # Note that this variable had the same name as Surface Temperature from
-  # conductivity csv. It has been renamed to prevent a conflict, but the
-  # user will need to write the customize_raw_dataset() hook to rename the
-  # raw input from "Surface Temperature (C)" to "surfacetemp - Surface
-  # Temperature (C)" so that the code can still retrieve it properly
   sea_surface_temperature_YSI:
     dims: [time]
     dtype: float

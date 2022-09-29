@@ -18,35 +18,27 @@ class STADataReader(DataReader):
 
     ---------------------------------------------------------------------------------"""
 
-    class Parameters(BaseModel, extra=Extra.forbid):
-        """If your CustomDataReader should take any additional arguments from the
-        retriever configuration file, then those should be specified here.
-
-        e.g.,:
-        custom_parameter: float = 5.0
-
-        """
-
-    parameters: Parameters = Parameters()
-    """Extra parameters that can be set via the retrieval configuration file. If you opt
-    to not use any configuration parameters then please remove the code above."""
-
-    def read(self, filename: str) -> Union[xr.Dataset, Dict[str, xr.Dataset]]:
+    def read(self, input_key: str) -> Union[xr.Dataset, Dict[str, xr.Dataset]]:
         """----------------------------------------------------------------------------
         Method to read data in a custom format and convert it into an xarray Dataset.
 
         Args:
-            filename (str): The path to the file to read in.
+            input_key (str): The path to the file to read in.
 
         Returns:
             xr.Dataset: An xr.Dataset object
         ----------------------------------------------------------------------------"""
         lzma_file = lzma.open(
-            filename,
+            input_key,
             encoding="cp1252",  # Default encoding for Windows devices
             mode="rt",
         )
-        df = pd.read_csv(lzma_file, header=41, index_col=False, sep="\t",)
+        df = pd.read_csv(
+            lzma_file,
+            header=41,
+            index_col=False,
+            sep="\t",
+        )
         dataset = df.to_xarray()
 
         # Add height variable
@@ -55,7 +47,7 @@ class STADataReader(DataReader):
         )
 
         # Compress row of variables in input into variables dimensioned by time and height
-        if ".sta" in filename:
+        if ".sta" in input_key:
             raw_categories = [
                 "Wind Speed (m/s)",
                 "Wind Speed Dispersion (m/s)",

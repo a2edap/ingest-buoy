@@ -1,6 +1,6 @@
 attrs:
   title: "Wave Buoy Pipeline"
-  description: "Ingest of 20-minute averaged waves dat from an AXYS Technologies buoy"
+  description: "Ingest of 20-minute averaged waves data from an AXYS Technologies buoy"
   location_id: morro
   location_meaning: "Morro Bay, CA"
   dataset_name: buoy_z06

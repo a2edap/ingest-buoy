@@ -25,7 +25,7 @@ coords:
 
 data_vars:
   wind_speed:
-    dims: [height, time]
+    dims: [time, height]
     dtype: float
     attrs:
       long_name: Wind Speed
@@ -33,14 +33,14 @@ data_vars:
       comment: Average wind speed over 10 minute interval
 
   horizontal_dispersion:
-    dims: [height, time]
+    dims: [time, height]
     dtype: float
     attrs:
       long_name: Horizontal Dispersion
       units: m/s
 
   min_wind_speed:
-    dims: [height, time]
+    dims: [time, height]
     dtype: float
     attrs:
       long_name: Min Wind Speed
@@ -48,7 +48,7 @@ data_vars:
       comment: Minimum wind speed measured during 10 minute interval
 
   max_wind_speed:
-    dims: [height, time]
+    dims: [time, height]
     dtype: float
     attrs:
       long_name: Max Wind Speed
@@ -56,42 +56,42 @@ data_vars:
       comment: Maximum wind speed measured during 10 minute interval
 
   wind_direction:
-    dims: [height, time]
+    dims: [time, height]
     dtype: float
     attrs:
       long_name: Wind Direction
       units: degrees
 
   vertical_wind_speed:
-    dims: [height, time]
+    dims: [time, height]
     dtype: float
     attrs:
       long_name: Vertical Wind Speed
       units: m/s
 
   vertical_dispersion:
-    dims: [height, time]
+    dims: [time, height]
     dtype: float
     attrs:
       long_name: Vertical Dispersion
       units: m/s
 
   carrier_noise_ratio:
-    dims: [height, time]
+    dims: [time, height]
     dtype: float
     attrs:
       long_name: Carrier to Noise Ratio (CNR)
       units: dB
 
   doppler_spectral_broadening:
-    dims: [height, time]
+    dims: [time, height]
     dtype: float
     attrs:
       long_name: Doppler Spectral Broadening
       units: m/s
 
   data_availability:
-    dims: [height, time]
+    dims: [time, height]
     dtype: float
     attrs:
       long_name: Availability

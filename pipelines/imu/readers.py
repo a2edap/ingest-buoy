@@ -131,7 +131,7 @@ def fread(fileObj, dtype):
     return val
 
 
-def extract_data(filename: str, packet: Dict[str, Dict]) -> xr.Dataset:
+def extract_data(input_key: str, packet: Dict[str, Dict]) -> xr.Dataset:
     # Create dictionary to hold raw binary data
     raw_data = {
         category: {var_name: [] for var_name in subpacket.keys()}
@@ -139,7 +139,7 @@ def extract_data(filename: str, packet: Dict[str, Dict]) -> xr.Dataset:
     }
 
     # Read the binary data from file and append to raw data dictionary
-    with open(filename, "rb") as bfile:
+    with open(input_key, "rb") as bfile:
         try:
             while True:
                 for category, subpacket in packet.items():
@@ -208,13 +208,15 @@ class IMUDataReader(DataReader):
 
         """
 
-    def read(self, filename: str, **kwargs) -> Union[xr.Dataset, Dict[str, xr.Dataset]]:
+    def read(
+        self, input_key: str, **kwargs
+    ) -> Union[xr.Dataset, Dict[str, xr.Dataset]]:
 
         # Determine which packet to use.
         dataset = None
         try:
-            dataset = extract_data(filename, morro_packet)
+            dataset = extract_data(input_key, morro_packet)
         except BaseException:
-            dataset = extract_data(filename, humbolt_packet)
+            dataset = extract_data(input_key, humbolt_packet)
 
         return dataset

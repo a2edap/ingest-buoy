@@ -12,3 +12,4 @@ typings/
 .pytest_cache/
 htmlcov/
 typings/
+*.ipynb

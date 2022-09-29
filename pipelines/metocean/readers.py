@@ -15,19 +15,6 @@ class BuoyReader(DataReader):
 
     ---------------------------------------------------------------------------------"""
 
-    class Parameters(BaseModel, extra=Extra.forbid):
-        """If your CustomDataReader should take any additional arguments from the
-        retriever configuration file, then those should be specified here.
-
-        e.g.,:
-        custom_parameter: float = 5.0
-
-        """
-
-    parameters: Parameters = Parameters()
-    """Extra parameters that can be set via the retrieval configuration file. If you opt
-    to not use any configuration parameters then please remove the code above."""
-
     def read(self, input_key) -> xr.Dataset:
         df: pd.DataFrame = pd.read_csv(input_key, index_col=0)  # type: ignore
         ds = xr.Dataset.from_dataframe(df)
@@ -54,17 +41,17 @@ class BuoyReader(DataReader):
                 i += 1
 
             depth = np.array(depth)  # type: ignore
-            vel_data = np.array(vel_data)  # type: ignore
-            dir_data = np.array(dir_data)  # type: ignore
+            vel_data = np.array(vel_data).T  # type: ignore
+            dir_data = np.array(dir_data).T  # type: ignore
 
             # Make depth coordinate variables
             ds["depth"] = xr.DataArray(data=depth, dims=["depth"])
             ds = ds.set_coords("depth")
 
             # Add current velocity and direction data to dataset
-            ds["current_speed"] = xr.DataArray(data=vel_data, dims=["depth", "time"])
+            ds["current_speed"] = xr.DataArray(data=vel_data, dims=["time", "depth"])
             ds["current_direction"] = xr.DataArray(
-                data=dir_data, dims=["depth", "time"]
+                data=dir_data, dims=["time", "depth"]
             )
 
         # Hack if currents file is missing

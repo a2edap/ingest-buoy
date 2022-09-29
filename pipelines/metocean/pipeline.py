@@ -171,7 +171,7 @@ class Metocean(IngestPipeline):
             magn = ax[0].pcolormesh(
                 date,
                 -ds["depth"],
-                ds["current_speed"],
+                ds["current_speed"].T,
                 cmap="Blues",
                 shading="nearest",
             )
@@ -183,7 +183,7 @@ class Metocean(IngestPipeline):
             dirc = ax[1].pcolormesh(
                 date,
                 -ds["depth"],
-                ds["current_direction"],
+                ds["current_direction"].T,
                 cmap="twilight",
                 shading="nearest",
             )
@@ -195,4 +195,3 @@ class Metocean(IngestPipeline):
             plot_file = get_filename(dataset, title="current_velocity", extension="png")
             fig.savefig(tmp_dir / plot_file)
             plt.close(fig)
-

@@ -17,9 +17,6 @@ readers:
 coords:
   # DEVELOPER: Specify the coords/data_vars that should be retrieved from any inputs
   time:
-    # Mapping of regex pattern (matching input key/file) to input name & converter(s) to
-    # run. The default is .*, which matches everything. Put the most specific patterns
-    # first because searching happens top -> down and stops at the first match.
     .*:
       # The name of the input variable as returned by the selected reader. If using a
       # built-in DataReader like the CSVReader or NetCDFReader, then will be exactly the
