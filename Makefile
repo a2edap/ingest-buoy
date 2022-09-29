@@ -1,2 +1,2 @@
 cookies:
-	@ cookiecutter templates/ingest -o pipelines
+	@ python templates/generate.py ingest

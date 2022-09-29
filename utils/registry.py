@@ -19,7 +19,7 @@ class PipelineRegistry:
         self._cache: Dict[Path, List[Pattern[str]]] = {}
         self._load()
 
-    def dispatch(self, input_keys: List[str], clump: bool = False):
+    def dispatch(self, input_keys: List[str], clump: bool = False, multidispatch: bool = False):
         """-----------------------------------------------------------------------------
         Instantiates and runs the appropriate Pipeline for the provided input files.
         according to the ingest's `mapping` specifications.
@@ -30,6 +30,10 @@ class PipelineRegistry:
             clump (bool): A flag indicating if the dispatcher should use a single
                 pipeline to process the input keys. If True, the first key will be used to
                 determine the pipeline to run. Defaults to False.
+            multidispatch (bool): A flag indicating if the dispatcher is allowed to use
+                multiple pipelines to process each input key. If True, any pipeline
+                whose regex pattern matches an input key will be used to process the
+                input key. Defaults to False.
 
         Returns:
             bool: True if the Pipeline ran without error, False otherwise.
@@ -42,7 +46,7 @@ class PipelineRegistry:
         for input_key in input_keys:
             config_files = self._match_input_key(input_key)
 
-            if len(config_files) > 1:
+            if not multidispatch and len(config_files) > 1:
                 raise RuntimeError(
                         f"More than one match for input key '{input_key}'. Please"
                         " update the pipeline triggers to remove duplicate matches."
@@ -54,29 +58,28 @@ class PipelineRegistry:
                 )
                 skipped += 1
             else:
-                config_file = config_files[0]
-
-                config = PipelineConfig.from_yaml(config_file)
-                pipeline = config.instantiate_pipeline()
-                inputs = input_keys if clump else [input_key]
-                logger.debug(
-                    "Running pipeline %s on input %s",
-                    pipeline.__repr_name__(),
-                    inputs,
-                )
-                try:
-                    pipeline.run(inputs)
-                    if clump:
-                        break
-                except BaseException:
-                    logger.exception(
-                        "Pipeline '%s' failed to process input: %s",
+                for config_file in config_files:
+                    config = PipelineConfig.from_yaml(config_file)
+                    pipeline = config.instantiate_pipeline()
+                    inputs = input_keys if clump else [input_key]
+                    logger.debug(
+                        "Running pipeline %s on input %s",
                         pipeline.__repr_name__(),
                         inputs,
                     )
-                    failures += 1
-                else:
-                    successes += 1
+                    try:
+                        pipeline.run(inputs)
+                        if clump:
+                            break
+                    except BaseException:
+                        logger.exception(
+                            "Pipeline '%s' failed to process input: %s",
+                            pipeline.__repr_name__(),
+                            inputs,
+                        )
+                        failures += 1
+                    else:
+                        successes += 1
         
         logger.info(
             "Processing completed with %s successes, %s failures, and %s skipped.",
