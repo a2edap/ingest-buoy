@@ -1,0 +1,15 @@
+classname: pipelines.metocean.pipeline.Metocean
+
+triggers:
+  - .*buoy.z06.*\.zip
+
+retriever:
+  path: pipelines/metocean/config/retriever.yaml
+
+dataset:
+  path: pipelines/metocean/config/dataset.yaml
+
+quality:
+  path: shared/quality.yaml
+storage:
+  path: shared/storage.yaml

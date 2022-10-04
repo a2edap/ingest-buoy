@@ -1,0 +1,16 @@
+classname: pipelines.waves.pipeline.Waves
+
+triggers:
+  - .*buoy.z06.*waves\.csv
+
+retriever:
+  path: pipelines/waves/config/retriever.yaml
+
+dataset:
+  path: pipelines/waves/config/dataset.yaml
+
+quality:
+  path: shared/quality.yaml
+
+storage:
+  path: shared/storage.yaml

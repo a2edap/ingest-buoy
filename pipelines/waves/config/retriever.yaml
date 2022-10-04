@@ -1,0 +1,69 @@
+classname: tsdat.io.retrievers.DefaultRetriever
+readers:
+  .*:
+    classname: tsdat.io.readers.CSVReader
+    # parameters:
+    # read_csv_kwargs:
+    #   # This treats the first column (time) as a data variable, which helps for when
+    #   # the pandas DataFrame is converted to an xarray Dataset
+    #   index_col: false
+
+    #   # This tells pandas to look at row index 2 (0-based) for the header
+    #   header: 2
+
+coords:
+  time:
+    .*:
+      name: DataTimeStamp
+      data_converters:
+        - classname: tsdat.io.converters.StringToDatetime
+          format: "%Y-%m-%d %H:%M:%S"
+          timezone: UTC
+
+data_vars:
+  wave_type:
+    name: WaveType
+  num_zero_crossings:
+    name: ZCN
+  mean_wave_height:
+    name: Havg
+  mean_wave_period_ts:
+    name: Tavg
+  mean_wave_period:
+    name: MeanPeriod
+  mean_wave_direction:
+    name: MeanDirection
+  mean_wave_spread:
+    name: MeanSpread
+  max_wave_height:
+    name: Hmax
+  max_wave_period:
+    name: Tmax
+  max_crest_period:
+    name: MaxCrest
+  peak_wave_period:
+    name: PeakPeriod
+  peak_wave_period_read:
+    name: TP5
+  wave_energy_period:
+    name: Te
+  peak_wave_direction:
+    name: PeakDirection
+  peak_wave_spread:
+    name: PeakSpread
+  significant_wave_height:
+    name: HM0
+  significant_wave_height_ts:
+    name: Hsig
+  significant_wave_period:
+    name: Tsig
+  significant_10_wave_height:
+    name: H110
+  significant_10_wave_period:
+    name: T110
+  wave_duration:
+    name: DurationMs
+  F1:
+    name: F1
+  F2:
+    name: F2

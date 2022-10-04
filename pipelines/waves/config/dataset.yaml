@@ -1,0 +1,247 @@
+attrs:
+  title: "Wave Buoy Pipeline"
+  description: "Ingest of 20-minute averaged waves data from an AXYS Technologies buoy"
+  location_id: morro
+  location_meaning: "Morro Bay, CA"
+  dataset_name: buoy_z06
+  qualifier: waves
+  data_level: a1
+  temporal: 20m
+
+coords:
+  time:
+    dims: [time]
+    dtype: datetime64[s]
+    attrs:
+      units: Seconds since 1970-01-01 00:00:00
+
+data_vars:
+  wave_type:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Wave Type
+      units: "1"
+      comment:
+        "User-programmable classification of different wave types. Wave types are not
+        defined for this deployment"
+      _FillValue: -9999
+
+  num_zero_crossings:
+    dims: [time]
+    dtype: int
+    attrs:
+      long_name: Number of Zero Crossings
+      units: "1"
+      _FillValue: -9999
+
+  mean_wave_height:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Mean Wave Height
+      comment: Wave height, average calculated from timeseries
+      units: m
+      valid_max: 10
+      _FillValue: -9999
+
+  mean_wave_period_ts:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Mean Wave Period
+      comment: Wave period, average calculated from timeseries
+      units: s
+      valid_max: 30
+      _FillValue: -9999
+
+  mean_wave_period:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Mean Wave Period
+      comment:
+        Wave period, average calculated from the zeroth and first spectral moments
+      units: s
+      valid_max: 30
+      _FillValue: -9999
+
+  mean_wave_direction:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Mean Wave Direction
+      units: degrees
+      valid_max: 360
+      _FillValue: -9999
+
+  mean_wave_spread:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Mean Wave Spread
+      units: degrees
+      valid_max: 360
+      _FillValue: -9999
+
+  max_wave_height:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Maximum Wave Height
+      units: m
+      valid_max: 10
+      _FillValue: -9999
+
+  max_wave_period:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Maximum Wave Period
+      units: s
+      valid_max: 30
+      _FillValue: -9999
+
+  max_crest_period:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Max Crest Period
+      comment: Wave period between highest wave crests
+      units: s
+      valid_max: 30
+      _FillValue: -9999
+
+  peak_wave_period:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Peak wave period
+      comment:
+        Wave period associated with maximum energy found in wave elevation spectrum
+      units: s
+      valid_max: 30
+      _FillValue: -9999
+
+  peak_wave_period_read:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Peak wave period
+      comment: Peak wave period computed by the Read method
+      units: s
+      valid_max: 30
+      _FillValue: -9999
+
+  wave_energy_period:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Wave Energy Period
+      comment:
+        Wave energy period, calculated from the negative first and zeroth spectral
+        moments
+      units: s
+      valid_max: 30
+      _FillValue: -9999
+
+  peak_wave_direction:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Peak Wave Direction
+      comment: Wave direction corresponding to peak wave period
+      units: degrees
+      valid_max: 360
+      _FillValue: -9999
+
+  peak_wave_spread:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Peak Wave Spread
+      comment: Wave spread corresponding to peak wave period
+      units: degrees
+      valid_max: 360
+      _FillValue: -9999
+
+  significant_wave_height:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Significant Wave Height
+      comment: Significant wave height, calculated from the zeroth spectral moment
+      units: m
+      valid_max: 30
+      _FillValue: -9999
+
+  significant_wave_height_ts:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Significant Wave Height
+      comment: Significant wave height, average of highest 1/3rd of waves in timeseries
+      units: m
+      valid_max: 30
+      _FillValue: -9999
+
+  significant_wave_period:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Significant Wave Period
+      comment: Significant wave period, average of highest 1/3rd of waves in timeseries
+      units: s
+      valid_delta: 0.03
+      valid_range: [0, 30]
+      _FillValue: -9999
+
+  significant_10_wave_height:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Significant Wave Height
+      comment:
+        Wave height, significant, average of highest 1/10th of waves in timeseries
+      units: m
+      valid_delta: 0.03
+      valid_range: [0, 10]
+      _FillValue: -9999
+
+  significant_10_wave_period:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Significant Wave Period
+      comment:
+        Wave period, significant, average of highest 1/10th of waves in timeseries
+      units: s
+      valid_delta: 0.03
+      valid_range: [0, 30]
+      _FillValue: -9999
+
+  wave_duration:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: Wave Duration
+      units: s
+      valid_delta: 100
+      valid_range: [0, 60000]
+      _FillValue: -9999
+
+  F1:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: F1
+      units: "1"
+      _FillValue: -9999
+
+  F2:
+    dims: [time]
+    dtype: double
+    attrs:
+      long_name: F2
+      units: "1"
+      _FillValue: -9999

@@ -1,19 +1,8 @@
 {
-    "autoDocstring.customTemplatePath": ".vscode/docstring.mustache",
-    "editor.formatOnSave": true,
+    // 
+    // Python environment settings
+    // 
     "python.envFile": "${workspaceFolder}/.vscode/.env",
-    "python.formatting.provider": "black",
-    "python.linting.flake8Args": [
-        "--exclude",
-        "templates/**"
-    ],
-    "python.linting.flake8Enabled": true,
-    "python.linting.lintOnSave": true,
-    "python.testing.pytestEnabled": true,
-    "python.testing.pytestArgs": [
-        "ingest",
-        "tests",
-    ],
     "terminal.integrated.env.osx": {
         "PYTHONPATH": "${PYTHONPATH}:${workspaceFolder}"
     },
@@ -23,7 +12,65 @@
     "terminal.integrated.env.windows": {
         "PYTHONPATH": "${PYTHONPATH}:${workspaceFolder}"
     },
+    // 
+    // Formatting, linting, code analysis, and testing settings
+    // 
+    "workbench.tree.indent": 20,
+    "editor.formatOnSave": true,
+    "yaml.format.printWidth": 88,
+    "yaml.format.proseWrap": "always",
+    "python.formatting.provider": "black",
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.flake8Enabled": false,
+    "python.linting.flake8Args": [
+        "--exclude",
+        "templates/**"
+    ],
+    "python.analysis.typeCheckingMode": "off",
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    // 
+    // Settings for helpful utilities
+    // 
+    "autoDocstring.customTemplatePath": ".vscode/docstring.mustache",
+    "errorLens.statusBarIconsEnabled": true,
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "TEST",
+        "IDEA",
+        "DEVELOPER",
+        "XXX",
+        "[ ]",
+        "[x]"
+    ],
     "todo-tree.filtering.excludeGlobs": [
         "**/templates/**", // Prevent template TODOs from polluting developer workspace
-    ]
+    ],
+    "yaml.schemas": {
+        ".vscode/schema/retriever-schema.json": "*retriever*.yaml",
+        ".vscode/schema/dataset-schema.json": "*dataset*.yaml",
+        ".vscode/schema/quality-schema.json": "*quality*.yaml",
+        ".vscode/schema/storage-schema.json": "*storage*.yaml",
+        ".vscode/schema/pipeline-schema.json": "*pipeline*.yaml",
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.mypy_cache": true,
+        "**/.pytest_cache": true,
+    },
+    "python.testing.unittestEnabled": false
 }

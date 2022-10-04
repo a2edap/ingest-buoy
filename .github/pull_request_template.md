@@ -10,7 +10,7 @@ location(s) it runs at.
 
 ## Developer Checklist
 
-* [ ] Addressed and removed all instances of `# TODO – Developer:`
+* [ ] Addressed and removed all instances of `# DEVELOPER:`
 * [ ] Removed unused or unnecessary boilerplate code
 * [ ] Updated ingest README.md and documentation
 * [ ] Added regex patterns in `mapping.py`

@@ -1,7 +1,6 @@
 name: tests
 on: [pull_request, push, workflow_dispatch]
 jobs:
-
   tests:
     runs-on: ubuntu-latest
     steps:
@@ -11,4 +10,5 @@ jobs:
           python-version: 3.8
       - run: pip install -r requirements-dev.txt
       - run: coverage run -m pytest
-      - run: coverage xml
+      - run: coverage xml --omit "templates/ingest/*","pipelines/ingest_testing/*"
+      - uses: codecov/codecov-action@v2

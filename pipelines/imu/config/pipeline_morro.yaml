@@ -1,0 +1,15 @@
+classname: pipelines.imu.pipeline.Imu
+
+triggers:
+  - .*buoy.z06.*\.imu.bin
+
+retriever:
+  path: pipelines/imu/config/retriever.yaml
+
+dataset:
+  path: pipelines/imu/config/dataset.yaml
+
+quality:
+  path: shared/quality.yaml
+storage:
+  path: shared/storage.yaml
