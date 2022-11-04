@@ -1,7 +1,7 @@
 import logging
 import re
 from pathlib import Path
-from typing import Dict, List, Pattern
+from typing import Dict, List, Pattern, Tuple
 from tsdat import PipelineConfig, read_yaml
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ class PipelineRegistry:
         self._cache: Dict[Path, List[Pattern[str]]] = {}
         self._load()
 
-    def dispatch(self, input_keys: List[str], clump: bool = False, multidispatch: bool = False):
+    def dispatch(self, input_keys: List[str], clump: bool = False, multidispatch: bool = False) -> Tuple[int, int, int]:
         """-----------------------------------------------------------------------------
         Instantiates and runs the appropriate Pipeline for the provided input files.
         according to the ingest's `mapping` specifications.
@@ -87,6 +87,7 @@ class PipelineRegistry:
             failures,
             skipped,
         )
+        return successes, failures, skipped
 
     def _load(self, folder: Path = Path("pipelines")):
         """-----------------------------------------------------------------------------
