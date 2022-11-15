@@ -1,4 +1,4 @@
-tsdat >0.4.3, <=0.5.0
+tsdat =0.5.2
 cmocean  
 notebook
 act-atmos
