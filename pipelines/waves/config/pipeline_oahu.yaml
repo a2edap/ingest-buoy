@@ -1,0 +1,20 @@
+classname: pipelines.waves.pipeline.Waves
+
+triggers:
+  - .*buoy.z07.*waves\.csv
+
+retriever:
+  path: pipelines/waves/config/retriever.yaml
+
+dataset:
+  path: pipelines/waves/config/dataset.yaml
+  overrides:
+    /attrs/location_id: oahu
+    /attrs/location_meaning: "Oahu, HI"
+    /attrs/dataset_name: buoy_z07
+
+quality:
+  path: shared/quality.yaml
+
+storage:
+  path: shared/storage.yaml
