@@ -3,3 +3,4 @@ cmocean
 notebook
 act-atmos
 seaborn
+metpy
