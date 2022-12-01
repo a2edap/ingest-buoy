@@ -112,7 +112,7 @@ data_vars:
     dtype: float
     attrs:
       long_name: Solar Radiation
-      units: (W/m^2)
+      units: W/m^2
 
   relative_humidity:
     dims: [time]
