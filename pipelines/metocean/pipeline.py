@@ -59,63 +59,54 @@ class Metocean(IngestPipeline):
 
             # Note gill is done separately (first) so that we can overlay the two
             # sources of wind speed and direction on the same plot (axs[0]).
-            if not (
-                all(ds.qc_wind_speed_gill == 1) and all(ds.qc_wind_direction_gill == 1)
-            ):
-                double_plot(
-                    axs[0],
-                    twins[0],
-                    data=[ds.wind_speed_gill, ds.wind_direction_gill],
-                    colors=colors,
-                    var_labels=[
-                        r"$\overline{\mathrm{U}}$ Gill",
-                        r"$\overline{\mathrm{\theta}}$ Gill",
-                    ],
-                    ax_labels=["", ""],
-                    linestyle="--",
-                )
-            if not (all(ds.qc_wind_speed == 1) and all(ds.qc_wind_direction == 1)):
-                double_plot(
-                    axs[0],
-                    twins[0],
-                    data=[ds.wind_speed, ds.wind_direction],
-                    colors=colors,
-                    var_labels=[
-                        r"$\overline{\mathrm{U}}$ Cup",
-                        r"$\overline{\mathrm{\theta}}$ Cup",
-                    ],
-                    ax_labels=[
-                        r"$\overline{\mathrm{U}}$ (ms$^{-1}$)",
-                        r"$\bar{\mathrm{\theta}}$ (degrees)",
-                    ],
-                )
-            if not (all(ds.qc_pressure == 1) and all(ds.qc_relative_humidity == 1)):
-                double_plot(
-                    axs[1],
-                    twins[1],
-                    data=[ds.pressure, ds.relative_humidity],
-                    colors=colors,
-                    var_labels=["Pressure", "Relative Humidity"],
-                    ax_labels=[
-                        r"$\overline{\mathrm{P}}$ (bar)",
-                        r"$\overline{\mathrm{RH}}$ (%)",
-                    ],
-                )
-            if not (
-                all(ds.qc_air_temperature == 3)
-                and all(ds.qc_sea_surface_temperature_YSI == 3)
-            ):
-                double_plot(
-                    axs[2],
-                    twins[2],
-                    data=[ds.air_temperature, ds.sea_surface_temperature_YSI],
-                    colors=colors,
-                    var_labels=["Air Temperature", "Sea Surface Temperature"],
-                    ax_labels=[
-                        r"$\overline{\mathrm{T}}_{air}$ ($\degree$C)",
-                        r"$\overline{\mathrm{SST}}$ ($\degree$C)",
-                    ],
-                )
+            double_plot(
+                axs[0],
+                twins[0],
+                data=[ds.wind_speed_gill, ds.wind_direction_gill],
+                colors=colors,
+                var_labels=[
+                    r"$\overline{\mathrm{U}}$ Gill",
+                    r"$\overline{\mathrm{\theta}}$ Gill",
+                ],
+                ax_labels=["", ""],
+                linestyle="--",
+            )
+            double_plot(
+                axs[0],
+                twins[0],
+                data=[ds.wind_speed, ds.wind_direction],
+                colors=colors,
+                var_labels=[
+                    r"$\overline{\mathrm{U}}$ Cup",
+                    r"$\overline{\mathrm{\theta}}$ Cup",
+                ],
+                ax_labels=[
+                    r"$\overline{\mathrm{U}}$ (ms$^{-1}$)",
+                    r"$\bar{\mathrm{\theta}}$ (degrees)",
+                ],
+            )
+            double_plot(
+                axs[1],
+                twins[1],
+                data=[ds.pressure, ds.relative_humidity],
+                colors=colors,
+                var_labels=["Pressure", "Relative Humidity"],
+                ax_labels=[
+                    r"$\overline{\mathrm{P}}$ (bar)",
+                    r"$\overline{\mathrm{RH}}$ (%)",
+                ],
+            )
+            double_plot(
+                axs[2],
+                twins[2],
+                data=[ds.air_temperature, ds.sea_surface_temperature_YSI],
+                colors=colors,
+                var_labels=["Air Temperature", "Sea Surface Temperature"],
+                ax_labels=[
+                    r"$\overline{\mathrm{T}}_{air}$ ($\degree$C)",
+                    r"$\overline{\mathrm{SST}}$ ($\degree$C)",
+                ],
+            )
 
             fig.suptitle(f"Surface Met Parameters at {location} on {date} {time}")
             twins[0].set_ylim(0, 360)
@@ -126,7 +117,7 @@ class Metocean(IngestPipeline):
                 axs[i].legend(
                     lines, labels, ncol=len(labels), bbox_to_anchor=(1, -0.15)
                 )
-                format_time_xticks(axs[i])
+                #format_time_xticks(axs[i])
                 axs[i].set_xlabel("Time (UTC)")
 
             plot_file = get_filename(
@@ -140,29 +131,25 @@ class Metocean(IngestPipeline):
             fig, ax = plt.subplots()
             twin = ax.twinx()
 
-            if not (
-                all(ds.qc_conductivity == 1)
-                and all(ds.qc_sea_surface_temperature_CTD == 3)
-            ):
-                double_plot(
-                    ax,
-                    twin,
-                    data=[ds.conductivity, ds.sea_surface_temperature_CTD],
-                    colors=colors,
-                    var_labels=[
-                        r"Conductivity (S m$^{-1}$)",
-                        r"$\overline{\mathrm{SST}}$ ($\degree$C)",
-                    ],
-                    ax_labels=[
-                        r"Conductivity (S m$^{-1}$)",
-                        r"$\overline{\mathrm{SST}}$ ($\degree$C)",
-                    ],
-                )
+            double_plot(
+                ax,
+                twin,
+                data=[ds.conductivity, ds.sea_surface_temperature_CTD],
+                colors=colors,
+                var_labels=[
+                    r"Conductivity (S m$^{-1}$)",
+                    r"$\overline{\mathrm{SST}}$ ($\degree$C)",
+                ],
+                ax_labels=[
+                    r"Conductivity (S m$^{-1}$)",
+                    r"$\overline{\mathrm{SST}}$ ($\degree$C)",
+                ],
+            )
 
             fig.suptitle(
                 f"Conductivity and Sea Surface Temperature at {location} on {date}"
             )
-            format_time_xticks(ax)
+            #format_time_xticks(ax)
             ax.set_xlabel("Time (UTC)")
             ax.grid(which="both", color="lightgray", linewidth=0.5)
             lines = ax.lines + twin.lines
@@ -190,7 +177,7 @@ class Metocean(IngestPipeline):
             )
             ax[0].set_xlabel("Time (UTC)")
             ax[0].set_ylabel(r"Range [m]")
-            format_time_xticks(ax[0])
+            #format_time_xticks(ax[0])
             add_colorbar(ax[0], magn, r"Current Speed (m s$^{-1}$)")
 
             dirc = ax[1].pcolormesh(
@@ -202,7 +189,7 @@ class Metocean(IngestPipeline):
             )
             ax[1].set_xlabel("Time (UTC)")
             ax[1].set_ylabel(r"Depth [m]")
-            format_time_xticks(ax[1])
+            #format_time_xticks(ax[1])
             add_colorbar(ax[1], dirc, r"Direction [deg from N]")
 
             plot_file = get_filename(dataset, title="current_velocity", extension="png")

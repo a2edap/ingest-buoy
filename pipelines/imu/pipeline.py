@@ -41,11 +41,19 @@ class Imu(IngestPipeline):
             roll_label = r"$\.{\theta}_{roll}$ [$\overline{\theta}_r$" + avg_roll
             pitch_label = r"$\.{\theta}_{pitch}$ [$\overline{\theta}_p$" + avg_pitch
 
-            dataset["roll"].plot.hist(bins=100,
-                ax=ax, edgecolor="black", histtype="step", label=roll_label,
+            dataset["roll"].plot.hist(
+                bins=100,
+                ax=ax,
+                edgecolor="black",
+                histtype="step",
+                label=roll_label,
             )
-            dataset["pitch"].plot.hist(bins=100,
-                ax=ax, edgecolor="red", histtype="step", label=pitch_label,
+            dataset["pitch"].plot.hist(
+                bins=100,
+                ax=ax,
+                edgecolor="red",
+                histtype="step",
+                label=pitch_label,
             )
 
             fig.suptitle(f"Buoy Motion Histogram at {location} on {date} {time}")
