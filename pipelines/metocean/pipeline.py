@@ -117,7 +117,7 @@ class Metocean(IngestPipeline):
                 axs[i].legend(
                     lines, labels, ncol=len(labels), bbox_to_anchor=(1, -0.15)
                 )
-                format_time_xticks(axs[i])
+                #format_time_xticks(axs[i])
                 axs[i].set_xlabel("Time (UTC)")
 
             plot_file = get_filename(
@@ -149,7 +149,7 @@ class Metocean(IngestPipeline):
             fig.suptitle(
                 f"Conductivity and Sea Surface Temperature at {location} on {date}"
             )
-            format_time_xticks(ax)
+            #format_time_xticks(ax)
             ax.set_xlabel("Time (UTC)")
             ax.grid(which="both", color="lightgray", linewidth=0.5)
             lines = ax.lines + twin.lines
@@ -177,7 +177,7 @@ class Metocean(IngestPipeline):
             )
             ax[0].set_xlabel("Time (UTC)")
             ax[0].set_ylabel(r"Range [m]")
-            format_time_xticks(ax[0])
+            #format_time_xticks(ax[0])
             add_colorbar(ax[0], magn, r"Current Speed (m s$^{-1}$)")
 
             dirc = ax[1].pcolormesh(
@@ -189,7 +189,7 @@ class Metocean(IngestPipeline):
             )
             ax[1].set_xlabel("Time (UTC)")
             ax[1].set_ylabel(r"Depth [m]")
-            format_time_xticks(ax[1])
+            #format_time_xticks(ax[1])
             add_colorbar(ax[1], dirc, r"Direction [deg from N]")
 
             plot_file = get_filename(dataset, title="current_velocity", extension="png")

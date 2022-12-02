@@ -55,8 +55,8 @@ follow the steps to copy the template repository into to your account.
 
 ## Setting up your Anaconda environment
 1. Open a terminal shell from your computer
-   - If you are on Linux or Mac, just open a regular terminal
-   - If you are on Windows, start your Anaconda prompt if you installed Anaconda directly
+   - Linux or Mac: open a regular terminal
+   - Windows: open an Anaconda prompt if you installed Anaconda directly
    to Windows, OR open a WSL terminal if you installed Anaconda via WSL.
 
 2. Run the following commands to create and activate your conda environment:
@@ -90,6 +90,24 @@ follow the steps to copy the template repository into to your account.
 VS Code that will make it much easier to get started quickly.)*
 
 2. Install the recommended extensions (there should be a pop-up in VS Code with recommendations).
+
+    **Windows Users**:
+    In order to run python scripts in VSCode, follow steps A-C below:
+
+    A. Install the extension Code Runner (authored by Jun Han).
+
+    B. Press `F1`, type `Preferences: Open User Settings (JSON)` and select it.
+
+    C. Add the following lines to the list of user settings, and update `<path to anaconda>` for
+    your machine:
+    ```bash
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "python.condaPath": "C:/<path to anaconda>/Anaconda3/python.exe",
+    "python.terminal.activateEnvironment": true,
+    "code-runner.executorMap": {
+        "python": "C:/<path to anaconda>/Anaconda3/Scripts/activate.bat && $pythonPath $fullFileName"
+    },
+    ```
 
 3. Tell VS Code to use your new conda environment:
     - Press `F1` to bring up the command pane in VS Code
@@ -139,24 +157,25 @@ to process all 'csv' files in some input folder `data/to/process/` you would run
 
 ## Adding a new pipeline
 
-1. Ensure your development environment is set up according to the instructions above
-
-2. Use a cookiecutter template to generate a new pipeline folder.  From your top level repository folder, run:
+1. Use a cookiecutter template to generate a new pipeline folder. From your top level
+repository folder run:
 
     ```bash
     make cookies
     ```
-    Cookiecutter will show some text in the prompts. More information on these prompts
-    can be found in the [template README.md](templates/ingest/README.md)
 
-    > The `make cookies` command is a memorable shortcut for `cookiecutter templates/ingest -o pipelines`
+    Follow the prompts that appear to generate a new ingestion pipeline. After completing all the
+    prompts cookiecutter will run and your new pipeline code will appear inside the
+    `pipelines/<module_name>` folder.
 
+    > The `make cookies` command is a memorable shortcut for `python templates/generate.py ingest`,
+    which itself is a wrapper around `cookiecutter templates/ingest -o pipelines`. To see more
+    information about the options available for this command run `python templates/generate.py --help`.    
 
-3. Once cookiecutter is done you will see your new pipeline folder appear inside
-`pipelines/`. Please see the README.md file inside that folder for more information on
-how to configure, run, test, and debug your pipeline. 
+2.  See the README.md file inside that folder for more information on how to configure, run,
+test, and debug your pipeline.
 
-> **This repository supports adding as many pipelines as you want - just rinse and repeat the steps above.**
+> This repository supports adding as many pipelines as you want - just repeat the steps above.
 
 
 ## Additional resources

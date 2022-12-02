@@ -55,7 +55,7 @@ class Waves(IngestPipeline):
 
             for i in range(3):
                 axs[i].set_xlabel("Time (UTC)")
-                format_time_xticks(axs[i])
+                # format_time_xtickss(axs[i])
 
             plot_file = get_filename(ds, title="wave_data_plots", extension="png")
             fig.savefig(tmp_dir / plot_file)
