@@ -3,7 +3,7 @@ import xarray as xr
 import matplotlib.pyplot as plt
 from tsdat import IngestPipeline, get_start_date_and_time_str, get_filename
 
-from utils import format_time_xticks
+# from utils import format_time_xticks
 
 
 class Imu(IngestPipeline):

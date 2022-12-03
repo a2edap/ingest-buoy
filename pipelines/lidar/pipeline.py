@@ -64,7 +64,7 @@ class Lidar(IngestPipeline):
                     label=f"{height} m",
                 )
 
-            # format_time_xticks(ax)
+            format_time_xticks(ax)
             ax.legend(
                 facecolor="white",
                 ncol=len(heights),
@@ -129,7 +129,7 @@ class Lidar(IngestPipeline):
             add_colorbar(axs[1], da, "Availability (%)")
 
             for i in range(2):
-                # format_time_xticks(axs[i])
+                format_time_xticks(axs[i])
                 axs[i].set_xlabel("Time (UTC)")
                 axs[i].set_ylabel("Height ASL (m)")
 
