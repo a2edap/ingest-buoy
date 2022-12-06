@@ -34,7 +34,7 @@ def format_time_xticks(
     if not ax.xaxis.majorTicks[0].label.get_text():
         ax.xaxis.set_major_locator(mpl.dates.HourLocator(byhour=range(start, stop, step)))  # type: ignore
         ax.xaxis.set_major_formatter(mpl.dates.DateFormatter(date_format))  # type: ignore
-        plt.setp(ax.xaxis.get_majorticklabels(), rotation=0)
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=0)
 
 
 def add_colorbar(ax: plt.Axes, plot: Any, label: str = "") -> Colorbar:
