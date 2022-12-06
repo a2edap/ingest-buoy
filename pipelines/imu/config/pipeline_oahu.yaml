@@ -1,0 +1,19 @@
+classname: pipelines.imu.pipeline.Imu
+
+triggers:
+  - .*buoy.z07.*\.imu.bin
+
+retriever:
+  path: pipelines/imu/config/retriever.yaml
+
+dataset:
+  path: pipelines/imu/config/dataset.yaml
+  overrides:
+    /attrs/location_id: oahu
+    /attrs/location_meaning: "Oahu, HI"
+    /attrs/dataset_name: buoy_z07
+
+quality:
+  path: shared/quality.yaml
+storage:
+  path: shared/storage.yaml

@@ -30,8 +30,10 @@ def format_time_xticks(
         to "%H-%M".
 
     ----------------------------------------------------------------------------"""
-    ax.xaxis.set_major_locator(mpl.dates.HourLocator(byhour=range(start, stop, step)))  # type: ignore
-    ax.xaxis.set_major_formatter(mpl.dates.DateFormatter(date_format))  # type: ignore
+    # check if a generic label for axes exists, if so then nothing was plotted
+    if not ax.xaxis.majorTicks[0].label.get_text():
+        ax.xaxis.set_major_locator(mpl.dates.HourLocator(byhour=range(start, stop, step)))  # type: ignore
+        ax.xaxis.set_major_formatter(mpl.dates.DateFormatter(date_format))  # type: ignore
     plt.setp(ax.xaxis.get_majorticklabels(), rotation=0)
 
 

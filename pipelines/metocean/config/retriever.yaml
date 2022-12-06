@@ -1,11 +1,13 @@
 classname: tsdat.io.retrievers.DefaultRetriever
 readers:
-  .*:
+  .*\.zip:
     classname: tsdat.io.readers.ZipReader
     parameters:
       readers:
         buoy:
           classname: pipelines.metocean.readers.BuoyReader
+  .*\.csv:
+    classname: pipelines.metocean.readers.BuoyReader
 
 coords:
   time:

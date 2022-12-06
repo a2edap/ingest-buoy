@@ -1,7 +1,7 @@
 import logging
 import re
 from pathlib import Path
-from typing import Dict, List, Pattern
+from typing import Dict, List, Pattern, Tuple
 from tsdat import PipelineConfig, read_yaml
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ class PipelineRegistry:
         self._cache: Dict[Path, List[Pattern[str]]] = {}
         self._load()
 
-    def dispatch(self, input_keys: List[str], clump: bool = False, multidispatch: bool = False):
+    def dispatch(self, input_keys: List[str], clump: bool = False, multidispatch: bool = False) -> Tuple[int, int, int]:
         """-----------------------------------------------------------------------------
         Instantiates and runs the appropriate Pipeline for the provided input files.
         according to the ingest's `mapping` specifications.
@@ -53,7 +53,7 @@ class PipelineRegistry:
                         f" Found matches: {config_files}"
                     )
             elif not len(config_files):
-                logger.warn(
+                logger.warning(
                     "No pipeline configuration found matching input key '%s'", input_key
                 )
                 skipped += 1
@@ -69,6 +69,7 @@ class PipelineRegistry:
                     )
                     try:
                         pipeline.run(inputs)
+                        successes += 1
                         if clump:
                             break
                     except BaseException:
@@ -78,8 +79,6 @@ class PipelineRegistry:
                             inputs,
                         )
                         failures += 1
-                    else:
-                        successes += 1
         
         logger.info(
             "Processing completed with %s successes, %s failures, and %s skipped.",
@@ -87,6 +86,7 @@ class PipelineRegistry:
             failures,
             skipped,
         )
+        return successes, failures, skipped
 
     def _load(self, folder: Path = Path("pipelines")):
         """-----------------------------------------------------------------------------

@@ -1,8 +1,8 @@
 classname: pipelines.metocean.pipeline.Metocean
 
 triggers:
-  - .*buoy\.z05.*\.zip
-  - .*buoy\.z05.*\.csv
+  - .*buoy\.z07.*\.zip
+  - .*buoy\.z07.*\.csv
 
 retriever:
   path: pipelines/metocean/config/retriever.yaml
@@ -10,9 +10,9 @@ retriever:
 dataset:
   path: pipelines/metocean/config/dataset.yaml
   overrides:
-    /attrs/location_id: humboldt
-    /attrs/location_meaning: "Humboldt, CA"
-    /attrs/dataset_name: buoy_z05
+    /attrs/location_id: oahu
+    /attrs/location_meaning: "Oahu, HI"
+    /attrs/dataset_name: buoy_z07
 
 quality:
   path: shared/quality.yaml

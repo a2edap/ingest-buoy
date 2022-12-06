@@ -66,7 +66,9 @@ class Lidar(IngestPipeline):
 
             format_time_xticks(ax)
             ax.legend(
-                facecolor="white", ncol=len(heights), bbox_to_anchor=(1, -0.05),
+                facecolor="white",
+                ncol=len(heights),
+                bbox_to_anchor=(1, -0.05),
             )
             ax.set_title("")  # Remove bogus title created by xarray
             fig.suptitle(f"Wind Speed Time Series at {location} on {date} {time}")
