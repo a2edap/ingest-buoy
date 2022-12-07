@@ -64,39 +64,40 @@ data_vars:
       units: degrees
       valid_max: 360
 
-  wind_speed_gill:
+  wind_speed_port:
     dims: [time]
     dtype: float
     attrs:
       long_name: Horizontal Wind Speed
-      comment: Surface horizontal wind speed, 2D ultrasonic anemometer
+      comment: Surface horizontal wind speed, anemometer located on port buoy mast mast
       units: m/s
       valid_max: 50
 
-  wind_direction_gill:
+  wind_direction_port:
     dims: [time]
     dtype: float
     attrs:
       long_name: Horizontal Wind Direction
-      comment: Surface horizontal wind direction, 2D ultrasonic anemometer
+      comment:
+        Surface horizontal wind direction, wind vane located on port buoy mast mast
       units: degrees
       valid_max: 360
 
-  wind_speed:
+  wind_speed_stbd:
     dims: [time]
     dtype: float
     attrs:
       long_name: Horizontal Wind Speed
-      comment: Surface wind speed, cup anemometer
+      comment: Surface wind speed, anemometer located on starboard buoy mast
       units: m/s
       valid_max: 50
 
-  wind_direction:
+  wind_direction_stbd:
     dims: [time]
     dtype: float
     attrs:
       long_name: Horizontal Wind Direction
-      comment: Surface wind direction, wind vane
+      comment: Surface wind direction, wind vane located on starboard buoy mast
       units: degrees
       valid_max: 360
 

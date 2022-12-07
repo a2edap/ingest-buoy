@@ -62,23 +62,26 @@ class Metocean(IngestPipeline):
             double_plot(
                 axs[0],
                 twins[0],
-                data=[ds.wind_speed_gill, ds.wind_direction_gill],
+                data=[ds.wind_speed_port, ds.wind_direction_port],
                 colors=colors,
                 var_labels=[
-                    r"$\overline{\mathrm{U}}$ Gill",
-                    r"$\overline{\mathrm{\theta}}$ Gill",
+                    r"$\overline{\mathrm{U}}$ Port",
+                    r"$\overline{\mathrm{\theta}}$ Port",
                 ],
-                ax_labels=["", ""],
+                ax_labels=[
+                    r"$\overline{\mathrm{U}}$ (ms$^{-1}$)",
+                    r"$\bar{\mathrm{\theta}}$ (degrees)",
+                ],
                 linestyle="--",
             )
             double_plot(
                 axs[0],
                 twins[0],
-                data=[ds.wind_speed, ds.wind_direction],
+                data=[ds.wind_speed_stbd, ds.wind_direction_stbd],
                 colors=colors,
                 var_labels=[
-                    r"$\overline{\mathrm{U}}$ Cup",
-                    r"$\overline{\mathrm{\theta}}$ Cup",
+                    r"$\overline{\mathrm{U}}$ Starboard",
+                    r"$\overline{\mathrm{\theta}}$ Starboard",
                 ],
                 ax_labels=[
                     r"$\overline{\mathrm{U}}$ (ms$^{-1}$)",

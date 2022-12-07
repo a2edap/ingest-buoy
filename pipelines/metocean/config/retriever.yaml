@@ -37,20 +37,20 @@ data_vars:
     .*currents\.csv:
       name: current_direction
 
-  wind_speed_gill:
-    .*gill\.csv:
-      name: "Horizontal Speed (m/s)"
-
-  wind_direction_gill:
-    .*gill\.csv:
-      name: "Horizontal Direction (deg)"
-
-  wind_speed:
-    .*wind\.csv:
+  wind_speed_port:
+    .*wind_port\.csv:
       name: Horizontal Speed (m/s)
 
-  wind_direction:
-    .*wind\.csv:
+  wind_direction_port:
+    .*wind_port\.csv:
+      name: Horizontal Direction (deg)
+
+  wind_speed_stbd:
+    .*wind_stbd\.csv:
+      name: Horizontal Speed (m/s)
+
+  wind_direction_stdb:
+    .*wind_stbd\.csv:
       name: Horizontal Direction (deg)
 
   pressure:
