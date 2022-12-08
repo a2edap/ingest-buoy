@@ -31,3 +31,18 @@ def test_imu_humboldt():
     dataset = pipeline.run([test_file])
     expected: xr.Dataset = xr.open_dataset(expected_file)  # type: ignore
     assert_close(dataset, expected, check_attrs=False)
+
+
+def test_imu_oahu():
+    config_path = Path("pipelines/imu/config/pipeline_oahu.yaml")
+    config = PipelineConfig.from_yaml(config_path)
+    pipeline = config.instantiate_pipeline()
+
+    test_file = "pipelines/imu/test/data/input/buoy.z07.00.20221123.213000.imu.bin"
+    expected_file = (
+        "pipelines/imu/test/data/expected/oahu.buoy_z07-imu.a1.20221123.213037.nc"
+    )
+
+    dataset = pipeline.run([test_file])
+    expected: xr.Dataset = xr.open_dataset(expected_file)  # type: ignore
+    assert_close(dataset, expected, check_attrs=False)

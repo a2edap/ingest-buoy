@@ -147,8 +147,9 @@ def extract_data(input_key: str, packet: Dict[str, Dict]) -> xr.Dataset:
                         _data = fread(bfile, dtype)
                         if name:
                             raw_data[category][name].append(_data)
-        except BaseException:
-            pass
+        except struct.error:
+            if "z05" in input_key and not (category == "header" and name == "sync1"):
+                raise
 
     # Convert raw data into numpy arrays
     data = {
@@ -195,6 +196,24 @@ def extract_data(input_key: str, packet: Dict[str, Dict]) -> xr.Dataset:
         "mag": {"dims": ["time", "space"], "data": mag},
         "pres": {"dims": ["time"], "data": pres},
     }
+
+    expected_len = len(time)
+    for var_name, data_dict in dictionary.items():
+        if var_name in ("time", "space"):
+            continue
+        data = data_dict["data"]
+        pad_len = expected_len - len(data)
+
+        if pad_len == 0:
+            continue
+
+        if len(data_dict["dims"]) == 2:
+            data_dict["data"] = np.append(
+                data_dict["data"], pad_len * [[-9999, -9999, -9999]], axis=0
+            )
+        else:
+            data_dict["data"] = np.pad(data, (0, pad_len), constant_values=-9999)
+
     return xr.Dataset.from_dict(dictionary)
 
 
@@ -216,7 +235,7 @@ class IMUDataReader(DataReader):
         dataset = None
         try:
             dataset = extract_data(input_key, morro_packet)
-        except BaseException:
+        except struct.error:
             dataset = extract_data(input_key, humbolt_packet)
 
         return dataset

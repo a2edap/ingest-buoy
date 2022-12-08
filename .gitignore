@@ -13,3 +13,4 @@ typings/
 htmlcov/
 typings/
 *.ipynb
+env/
