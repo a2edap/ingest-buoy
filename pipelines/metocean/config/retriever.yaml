@@ -4,7 +4,7 @@ readers:
     classname: tsdat.io.readers.ZipReader
     parameters:
       readers:
-        buoy:
+        .*\.csv:
           classname: pipelines.metocean.readers.BuoyReader
   .*\.csv:
     classname: pipelines.metocean.readers.BuoyReader
