@@ -3,7 +3,7 @@
 The buoy_z06 ingestion pipeline was created from a cookiecutter template. This README file contains
 instructions for running and testing your pipeline.  
 
-Note:  For buoy_z07 (Oahu), theh bottom range gate needed to be changed.  This ingest was originally hard-coded with the heights.  Consider making that a dynamic read from the raw data.  The  heights are right above the column headers in the raw data.
+Note:  For buoy_z07 (Oahu), the bottom range gate needed to be changed.  This ingest was originally hard-coded with the heights.  Consider making that a dynamic read from the raw data.  The  heights are right above the column headers in the raw data.
 
 ## Prerequisites
 
