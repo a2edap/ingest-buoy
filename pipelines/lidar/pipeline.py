@@ -54,7 +54,7 @@ class Lidar(IngestPipeline):
         with self.storage.uploadable_dir(datastream) as tmp_dir:
 
             fig, ax = plt.subplots()
-            heights = [40, 90, 140, 200]
+            heights = dataset["height"].data[::3]
             for i, height in enumerate(heights):
                 velocity = ds.wind_speed.sel(height=height)
                 velocity.plot(
