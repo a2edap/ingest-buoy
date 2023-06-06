@@ -28,23 +28,42 @@ class STADataReader(DataReader):
         Returns:
             xr.Dataset: An xr.Dataset object
         ----------------------------------------------------------------------------"""
-        lzma_file = lzma.open(
+        altitudes = ""
+
+        with lzma.open(
             input_key,
             encoding="cp1252",  # Default encoding for Windows devices
             mode="rt",
-        )
-        df = pd.read_csv(
-            lzma_file,
-            header=41,
-            index_col=False,
-            sep="\t",
-        )
+        ) as lzma_file:
+            header_len = int(lzma_file.readline().split("=")[1])
+
+            # locate the altitudes header line
+            for i in range(header_len - 1):
+                header_line = lzma_file.readline()
+
+                if "Altitudes" in header_line:
+                    lineinfo = header_line.split("=")
+                    altitudes = lineinfo[1].replace("\n", "")
+                    break
+
+            df = pd.read_csv(
+                lzma_file,
+                header=1,  # start at 1 because we've already read the header
+                index_col=False,
+                sep="\t",
+            )
+
         dataset = df.to_xarray()
 
-        # Add height variable
-        dataset["height"] = xr.DataArray(
-            data=[40, 60, 80, 90, 100, 120, 140, 160, 180, 200, 220, 240], dims="height"
-        )
+        if altitudes != "":
+            dataset["height"] = xr.DataArray(
+                data=np.fromstring(altitudes, sep="\t", dtype=int), dims="height"
+            )
+        else:
+            # if we didn't find the altitudes in the input file, we can attempt to hard code the values
+            dataset["height"] = xr.DataArray(
+                data=[40, 60, 80, 90, 100, 120, 140, 160, 180, 200, 220, 240], dims="height"
+            )
 
         # Compress row of variables in input into variables dimensioned by time and height
         if ".sta" in input_key:

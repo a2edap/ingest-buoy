@@ -2,7 +2,6 @@ classname: pipelines.metocean.pipeline.Metocean
 
 triggers:
   - .*buoy\.z07.*\.zip
-  - .*buoy\.z07.*\.csv
 
 retriever:
   path: pipelines/metocean/config/retriever.yaml
