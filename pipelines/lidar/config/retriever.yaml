@@ -8,7 +8,7 @@ coords:
     name: Timestamp (end of interval)
     data_converters:
       - classname: tsdat.io.converters.StringToDatetime
-        format: "%Y-%m-%d %H:%M"
+        format: mixed
         timezone: UTC
   height:
     name: height

@@ -1,7 +1,8 @@
-import matplotlib as mpl
-from matplotlib.colorbar import Colorbar
-import matplotlib.pyplot as plt
 from typing import Any
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from matplotlib.colorbar import Colorbar
 
 __all__ = ["format_time_xticks", "add_colorbar"]
 
@@ -30,11 +31,18 @@ def format_time_xticks(
         to "%H-%M".
 
     ----------------------------------------------------------------------------"""
-    # check if a generic label for axes exists, if so then nothing was plotted
-    if not ax.xaxis.majorTicks[0].label.get_text():
-        ax.xaxis.set_major_locator(mpl.dates.HourLocator(byhour=range(start, stop, step)))  # type: ignore
-        ax.xaxis.set_major_formatter(mpl.dates.DateFormatter(date_format))  # type: ignore
+    from matplotlib.dates import HOURLY, AutoDateFormatter, AutoDateLocator
+
+    # Copied from matplotlib documentation:
+    # https://matplotlib.org/stable/api/dates_api.html#matplotlib.dates.AutoDateFormatter
+    locator = AutoDateLocator()
+    locator.intervald[HOURLY] = [3]  # only show every 3 hours
+    formatter = AutoDateFormatter(locator)
+    ax.xaxis.set_major_locator(locator)
+    ax.xaxis.set_major_formatter(formatter)
     plt.setp(ax.xaxis.get_majorticklabels(), rotation=0)
+    for label in ax.get_xticklabels(which="both"):
+        label.set_horizontalalignment("center")
 
 
 def add_colorbar(ax: plt.Axes, plot: Any, label: str = "") -> Colorbar:

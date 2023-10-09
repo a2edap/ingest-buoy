@@ -1,7 +1,6 @@
-import xarray as xr
-
 import matplotlib.pyplot as plt
-from tsdat import IngestPipeline, get_start_date_and_time_str, get_filename
+import xarray as xr
+from tsdat import IngestPipeline, get_start_date_and_time_str
 
 # from utils import format_time_xticks
 
@@ -28,12 +27,7 @@ class Imu(IngestPipeline):
         datastream: str = self.dataset_config.attrs.datastream
 
         date, time = get_start_date_and_time_str(dataset)
-
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
-
+        with plt.style.context("shared/styling.mplstyle"):
             fig, ax = plt.subplots()
 
             avg_roll = f"= {dataset['roll'].data.mean():.3f} deg]"
@@ -63,8 +57,6 @@ class Imu(IngestPipeline):
             ax.set_xlim(-25, 25)
             ax.legend(ncol=2, bbox_to_anchor=(1, -0.04))
 
-            plot_file = get_filename(
-                dataset, title="buoy_motion_histogram", extension="png"
-            )
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath(title="buoy_motion_histogram")
+            fig.savefig(plot_file)
             plt.close(fig)

@@ -1,13 +1,14 @@
 import os
+
 import cmocean
+import matplotlib.pyplot as plt
 import numpy as np
-import xarray as xr
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
-from tsdat import IngestPipeline, get_start_date_and_time_str, get_filename
+import xarray as xr
+from tsdat import IngestPipeline, get_start_date_and_time_str
 
-from utils import format_time_xticks, add_colorbar
+from utils import add_colorbar, format_time_xticks
 
 
 class Metocean(IngestPipeline):
@@ -47,13 +48,11 @@ class Metocean(IngestPipeline):
 
         date, time = get_start_date_and_time_str(ds)
 
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-        cmap = sns.color_palette("viridis", as_cmap=True)
-        colors = [cmap(0.00), cmap(0.60)]
+        with plt.style.context("shared/styling.mplstyle"):
+            cmap = sns.color_palette("viridis", as_cmap=True)
+            colors = [cmap(0.00), cmap(0.60)]
 
-        # Create the first plot -- Surface Met Parameters
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+            # Create the first plot -- Surface Met Parameters
             fig, axs = plt.subplots(nrows=3)
             twins = [ax.twinx() for ax in axs]
 
@@ -123,14 +122,11 @@ class Metocean(IngestPipeline):
                 format_time_xticks(axs[i])
                 axs[i].set_xlabel("Time (UTC)")
 
-            plot_file = get_filename(
-                dataset, title="surface_met_parameters", extension="png"
-            )
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath(title="surface_met_parameters")
+            fig.savefig(plot_file)
             plt.close(fig)
 
-        # Create the second plot – conductivity and sea surface temperature
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+            # Create the second plot – conductivity and sea surface temperature
             fig, ax = plt.subplots()
             twin = ax.twinx()
 
@@ -159,12 +155,11 @@ class Metocean(IngestPipeline):
             labels = [line.get_label() for line in lines]
             ax.legend(lines, labels, ncol=len(labels), bbox_to_anchor=(1, -0.03))
 
-            plot_file = get_filename(dataset, title="conductivity", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath(title="conductivity")
+            fig.savefig(plot_file)
             plt.close(fig)
 
             # Create the third plot - current velocities
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
             fig, ax = plt.subplots(
                 nrows=2, ncols=1, figsize=(14, 8), constrained_layout=True
             )
@@ -195,6 +190,6 @@ class Metocean(IngestPipeline):
             format_time_xticks(ax[1])
             add_colorbar(ax[1], dirc, r"Direction [deg from N]")
 
-            plot_file = get_filename(dataset, title="current_velocity", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath(title="current_velocity")
+            fig.savefig(plot_file)
             plt.close(fig)
