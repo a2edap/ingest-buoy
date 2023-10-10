@@ -1,11 +1,11 @@
 attrs:
-  title: "IMU Buoy Pipeline"
-  description:
-    "Ingest of IMU data from an AXYS Technologies buoy."
+  title: IMU Buoy Pipeline
+  description: Ingest of IMU data from an AXYS Technologies buoy.
   location_id: morro
-  location_meaning: "Morro Bay, CA"
-  dataset_name: buoy_z06
-  data_level: a1
+  location_meaning: Morro Bay, CA
+  dataset_name: buoy
+  z_id: z06
+  data_level: a0
   qualifier: imu
   # temporal:
   # institution:
