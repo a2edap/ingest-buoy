@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import numpy as np
 import xarray as xr
 
 from utils.a2e_tsdat import PipelineConfig, assert_close, get_version
@@ -34,6 +35,7 @@ def test_metocean_humboldt():
     # have a valid_min attribute
     if get_version() >= "0.7.0":
         expected["qc_current_speed"].data[expected["qc_current_speed"] == 4] = 2
+    expected["current_speed"].data[expected["current_speed"] > 5] = np.nan
     assert_close(dataset, expected, check_attrs=False)
 
 

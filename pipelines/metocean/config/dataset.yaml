@@ -3,8 +3,9 @@ attrs:
   description: "Ingest of metocean data from an AXYS Technologies buoy."
   location_id: morro
   location_meaning: "Morro Bay, CA"
-  dataset_name: buoy_z06
-  data_level: a1
+  dataset_name: buoy
+  z_id: z06
+  data_level: a0
   qualifier: metocean
   temporal: 10m
   instrument_manufacturer: "AXYS Technologies Inc."
