@@ -7,8 +7,7 @@ managers:
       - classname: tsdat.qc.handlers.FailPipeline
         parameters:
           context: Coordinate variables cannot be missing.
-    apply_to:
-      - COORDS
+    apply_to: [COORDS]
 
   - name: Fail if monotonic coordinates
     checker:
@@ -18,11 +17,10 @@ managers:
     handlers:
       - classname: tsdat.qc.handlers.FailPipeline
         parameters:
-          context: Coordinate variables must be strictly increasing.
-    apply_to:
-      - time
+          context: Time must be strictly increasing.
+    apply_to: [time]
 
-  #---------------------------------------------------------------
+    #---------------------------------------------------------------
   - name: Remove missing data
     checker:
       classname: tsdat.qc.checkers.CheckMissing
@@ -30,34 +28,38 @@ managers:
       - classname: tsdat.qc.handlers.RemoveFailedValues
       - classname: tsdat.qc.handlers.RecordQualityResults
         parameters:
-          bit: 1
           assessment: bad
           meaning: "Value is equal to _FillValue or NaN"
-    apply_to:
-      - DATA_VARS
+    apply_to: [DATA_VARS]
+    exclude:
+        - latitude
+        - longitude
+        - altitude
 
   - name: Flag data below minimum valid threshold
     checker:
       classname: tsdat.qc.checkers.CheckValidMin
     handlers:
-      - classname: tsdat.qc.handlers.RemoveFailedValues
       - classname: tsdat.qc.handlers.RecordQualityResults
         parameters:
-          bit: 2
           assessment: bad
           meaning: "Value is less than the valid_min."
-    apply_to:
-      - DATA_VARS
+    apply_to: [DATA_VARS]
+    exclude:
+        - latitude
+        - longitude
+        - altitude
 
   - name: Flag data above maximum valid threshold
     checker:
       classname: tsdat.qc.checkers.CheckValidMax
     handlers:
-      - classname: tsdat.qc.handlers.RemoveFailedValues
       - classname: tsdat.qc.handlers.RecordQualityResults
         parameters:
-          bit: 3
           assessment: bad
           meaning: "Value is greater than the valid_max."
-    apply_to:
-      - DATA_VARS
+    apply_to: [DATA_VARS]
+    exclude:
+        - latitude
+        - longitude
+        - altitude
