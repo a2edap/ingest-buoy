@@ -10,10 +10,11 @@ dataset:
   path: pipelines/lidar/config/dataset.yaml
   overrides:
     /attrs/location_id: humboldt
-    /attrs/location_meaning: "Humboldt, CA"
-    /attrs/dataset_name: buoy_z05
+    /attrs/location_meaning: Humboldt, CA
+    /attrs/z_id: z05
 
 quality:
   path: shared/quality.yaml
+
 storage:
   path: shared/storage.yaml
