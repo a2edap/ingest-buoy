@@ -1,6 +1,7 @@
-import xarray as xr
 from pathlib import Path
-from tsdat import PipelineConfig, assert_close
+
+import xarray as xr
+from tsdat import PipelineConfig, assert_close, get_version
 
 
 # Test missing current file
@@ -28,6 +29,10 @@ def test_metocean_humboldt():
 
     dataset = pipeline.run([test_file])
     expected: xr.Dataset = xr.open_dataset(expected_file)  # type: ignore
+    # Previously bit 2 represented a valid_min check even though current_speed doesn't
+    # have a valid_min attribute
+    if get_version() >= "0.7.0":
+        expected["qc_current_speed"].data[expected["qc_current_speed"] == 4] = 2
     assert_close(dataset, expected, check_attrs=False)
 
 
@@ -44,4 +49,8 @@ def test_currents_humboldt():
 
     dataset = pipeline.run([test_file])
     expected: xr.Dataset = xr.open_dataset(expected_file)  # type: ignore
+    # Previously bit 2 represented a valid_min check even though current_speed doesn't
+    # have a valid_min attribute
+    if get_version() >= "0.7.0":
+        expected["qc_current_speed"].data[expected["qc_current_speed"] == 4] = 2
     assert_close(dataset, expected, check_attrs=False)
