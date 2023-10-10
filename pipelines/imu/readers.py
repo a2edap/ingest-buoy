@@ -1,10 +1,12 @@
-import struct
 import datetime
+import struct
+from typing import Dict, Union
+
 import numpy as np
 import xarray as xr
-from typing import Dict, Union
 from pydantic import BaseModel, Extra
-from tsdat import DataReader
+
+from utils.a2e_tsdat import DataReader
 
 
 class DTYPE:
@@ -230,7 +232,6 @@ class IMUDataReader(DataReader):
     def read(
         self, input_key: str, **kwargs
     ) -> Union[xr.Dataset, Dict[str, xr.Dataset]]:
-
         # Determine which packet to use.
         dataset = None
         try:

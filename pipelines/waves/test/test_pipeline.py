@@ -1,6 +1,8 @@
-import xarray as xr
 from pathlib import Path
-from tsdat import PipelineConfig, assert_close
+
+import xarray as xr
+
+from utils.a2e_tsdat import PipelineConfig, assert_close
 
 
 def test_waves_morro():

@@ -1,7 +1,8 @@
 from pathlib import Path
 
 import xarray as xr
-from tsdat import PipelineConfig, assert_close, get_version
+
+from utils.a2e_tsdat import PipelineConfig, assert_close, get_version
 
 
 # Test missing current file

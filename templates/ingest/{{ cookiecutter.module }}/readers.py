@@ -1,7 +1,9 @@
 from typing import Dict, Union
-from pydantic import BaseModel, Extra
+
 import xarray as xr
-from tsdat import DataReader
+from pydantic import BaseModel, Extra
+
+from utils.a2e_tsdat import DataReader
 
 
 # DEVELOPER: Implement or remove the CustomDataReader. If implementing it, please

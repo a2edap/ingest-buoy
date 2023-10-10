@@ -2,11 +2,13 @@ import logging
 import re
 from pathlib import Path
 from typing import Dict, List, Pattern, Tuple
-from tsdat import PipelineConfig, read_yaml
+
+from utils.a2e_tsdat import PipelineConfig, read_yaml
 
 logger = logging.getLogger(__name__)
 
 __all__ = ["PipelineRegistry"]
+
 
 class PipelineRegistry:
     """---------------------------------------------------------------------------------
@@ -19,7 +21,9 @@ class PipelineRegistry:
         self._cache: Dict[Path, List[Pattern[str]]] = {}
         self._load()
 
-    def dispatch(self, input_keys: List[str], clump: bool = False, multidispatch: bool = False) -> Tuple[int, int, int]:
+    def dispatch(
+        self, input_keys: List[str], clump: bool = False, multidispatch: bool = False
+    ) -> Tuple[int, int, int]:
         """-----------------------------------------------------------------------------
         Instantiates and runs the appropriate Pipeline for the provided input files.
         according to the ingest's `mapping` specifications.
@@ -48,10 +52,10 @@ class PipelineRegistry:
 
             if not multidispatch and len(config_files) > 1:
                 raise RuntimeError(
-                        f"More than one match for input key '{input_key}'. Please"
-                        " update the pipeline triggers to remove duplicate matches."
-                        f" Found matches: {config_files}"
-                    )
+                    f"More than one match for input key '{input_key}'. Please"
+                    " update the pipeline triggers to remove duplicate matches."
+                    f" Found matches: {config_files}"
+                )
             elif not len(config_files):
                 logger.warning(
                     "No pipeline configuration found matching input key '%s'", input_key
@@ -79,7 +83,7 @@ class PipelineRegistry:
                             inputs,
                         )
                         failures += 1
-        
+
         logger.info(
             "Processing completed with %s successes, %s failures, and %s skipped.",
             successes,
@@ -128,4 +132,3 @@ class PipelineRegistry:
                     matches.append(path)
                     break
         return matches
-        

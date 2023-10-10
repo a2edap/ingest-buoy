@@ -1,8 +1,9 @@
 import numpy as np
-from pydantic import BaseModel, Extra
 import xarray as xr
 from numpy.typing import NDArray
-from tsdat import QualityChecker, QualityHandler
+from pydantic import BaseModel, Extra
+
+from utils.a2e_tsdat import QualityChecker, QualityHandler
 
 
 # DEVELOPER: Implement or remove the CustomQualityChecker. If implementing it, please
@@ -31,7 +32,6 @@ class CustomQualityChecker(QualityChecker):
     to not use any configuration parameters then please remove the code above."""
 
     def run(self, dataset: xr.Dataset, variable_name: str) -> NDArray[np.bool8]:
-
         # True values in the failures array indicate a quality problem.
         var_data = dataset[variable_name]
         failures: NDArray[np.bool8] = np.zeros_like(var_data, dtype=np.bool8)  # type: ignore
@@ -68,5 +68,4 @@ class CustomQualityHandler(QualityHandler):
     def run(
         self, dataset: xr.Dataset, variable_name: str, failures: NDArray[np.bool8]
     ) -> xr.Dataset:
-
         return dataset
