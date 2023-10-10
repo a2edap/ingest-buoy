@@ -5,7 +5,8 @@ attrs:
   description: {{ cookiecutter.ingest_description }}
   location_id: {{ cookiecutter.location_id }}
   dataset_name: {{ cookiecutter.module }}
-  data_level: {% if cookiecutter.use_custom_qc == "no" %}a1{% else %}b1{% endif %}
+  z_id: z01
+  data_level: {% if cookiecutter.use_custom_qc == "no" %}a0{% else %}b0{% endif %}
   # qualifier: 
   # temporal: 
   # institution: 
@@ -13,7 +14,7 @@ attrs:
 coords:
   time:
     dims: [time]
-    dtype: datetime64[s]
+    dtype: datetime64[ns]
     attrs:
       units: Seconds since 1970-01-01 00:00:00
 
