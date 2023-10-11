@@ -1,10 +1,9 @@
-import xarray as xr
-import numpy as np
 import cmocean
 import matplotlib.pyplot as plt
-from typing import Dict
+import numpy as np
+import xarray as xr
+from tsdat import IngestPipeline, get_filename, get_start_date_and_time_str
 
-from tsdat import IngestPipeline, get_start_date_and_time_str, get_filename
 from utils import add_colorbar, format_time_xticks
 
 
@@ -52,7 +51,6 @@ class Lidar(IngestPipeline):
         plt.style.use("shared/styling.mplstyle")
 
         with self.storage.uploadable_dir(datastream) as tmp_dir:
-
             fig, ax = plt.subplots()
             heights = dataset["height"].data[::3]
             for i, height in enumerate(heights):
@@ -64,7 +62,7 @@ class Lidar(IngestPipeline):
                     label=f"{height} m",
                 )
 
-            format_time_xticks(ax)
+            # format_time_xticks(ax)
             ax.legend(
                 facecolor="white",
                 ncol=len(heights),
@@ -82,7 +80,6 @@ class Lidar(IngestPipeline):
         # Create the second plot – Lidar wind speed and direction at all elevations
         # and a data availability quality metric.
         with self.storage.uploadable_dir(datastream) as tmp_dir:
-
             # Reduce dimensionality of dataset – otherwise the details are obscured
             ds_1H: xr.Dataset = ds.resample(time="1H").nearest()
 
@@ -129,7 +126,7 @@ class Lidar(IngestPipeline):
             add_colorbar(axs[1], da, "Availability (%)")
 
             for i in range(2):
-                format_time_xticks(axs[i])
+                # format_time_xticks(axs[i])
                 axs[i].set_xlabel("Time (UTC)")
                 axs[i].set_ylabel("Height ASL (m)")
 
