@@ -27,14 +27,14 @@ data_vars:
       name: "Conductivity (Siemens/m)"
 
   current_speed:
-    .*currents\.csv:
+    .*currents.*\.csv:
       name: current_speed
       data_converters:
         - classname: tsdat.io.converters.UnitsConverter
           input_units: mm/s
 
   current_direction:
-    .*currents\.csv:
+    .*currents.*\.csv:
       name: current_direction
 
   wind_speed_port:
@@ -49,7 +49,7 @@ data_vars:
     .*wind_stbd\.csv:
       name: Horizontal Speed (m/s)
 
-  wind_direction_stdb:
+  wind_direction_stbd:
     .*wind_stbd\.csv:
       name: Horizontal Direction (deg)
 
