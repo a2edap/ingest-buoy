@@ -3,9 +3,10 @@ attrs:
   description: "Ingest of 20-minute averaged waves data from an AXYS Technologies buoy"
   location_id: morro
   location_meaning: "Morro Bay, CA"
-  dataset_name: buoy_z06
+  dataset_name: buoy
+  z_id: z06
   qualifier: waves
-  data_level: a1
+  data_level: a0
   temporal: 20m
 
 coords:
