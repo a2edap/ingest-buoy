@@ -11,7 +11,7 @@ dataset:
   overrides:
     /attrs/location_id: humboldt
     /attrs/location_meaning: "Humboldt, CA"
-    /attrs/dataset_name: buoy_z05
+    /attrs/z_id: z05
 
 quality:
   path: shared/quality.yaml
