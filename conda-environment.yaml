@@ -5,17 +5,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.9
+  - python=3.10
   - pip
-  - act-atmos
   - pip:
-      - tsdat>=0.5.5,<0.6.0
-      - cmocean
-      - cookiecutter==2.1.1
-      - pytest
-      - coverage
-      - mypy
-      - black
-      - isort
-      - notebook
-      - metpy
+      - -r requirements-dev.txt

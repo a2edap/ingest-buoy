@@ -1,11 +1,12 @@
-from typing import Dict, Union
-from pydantic import BaseModel, Extra
-import xarray as xr
-import pandas as pd
-import numpy as np
 import lzma
+from typing import Dict, Union
 
-from tsdat import DataReader
+import numpy as np
+import pandas as pd
+import xarray as xr
+from pydantic import BaseModel, Extra
+
+from utils.a2e_tsdat import DataReader
 
 
 class STADataReader(DataReader):
@@ -62,7 +63,8 @@ class STADataReader(DataReader):
         else:
             # if we didn't find the altitudes in the input file, we can attempt to hard code the values
             dataset["height"] = xr.DataArray(
-                data=[40, 60, 80, 90, 100, 120, 140, 160, 180, 200, 220, 240], dims="height"
+                data=[40, 60, 80, 90, 100, 120, 140, 160, 180, 200, 220, 240],
+                dims="height",
             )
 
         # Compress row of variables in input into variables dimensioned by time and height

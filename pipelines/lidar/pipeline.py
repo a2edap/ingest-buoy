@@ -1,11 +1,12 @@
-import xarray as xr
-import numpy as np
-import cmocean
-import matplotlib.pyplot as plt
 from typing import Dict
 
-from tsdat import IngestPipeline, get_start_date_and_time_str, get_filename
+import cmocean
+import matplotlib.pyplot as plt
+import numpy as np
+import xarray as xr
+
 from utils import add_colorbar, format_time_xticks
+from utils.a2e_tsdat import IngestPipeline, get_start_date_and_time_str
 
 
 class Lidar(IngestPipeline):
@@ -48,11 +49,7 @@ class Lidar(IngestPipeline):
 
         date, time = get_start_date_and_time_str(dataset)
 
-        plt.style.use("default")  # clear any styles that were set before
-        plt.style.use("shared/styling.mplstyle")
-
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
-
+        with plt.style.context("shared/styling.mplstyle"):
             fig, ax = plt.subplots()
             heights = dataset["height"].data[::3]
             for i, height in enumerate(heights):
@@ -75,13 +72,12 @@ class Lidar(IngestPipeline):
             ax.set_ylabel(r"Wind Speed (ms$^{-1}$)")
             ax.set_xlabel("Time (UTC)")
 
-            plot_file = get_filename(dataset, title="wind_speeds", extension="png")
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath(title="wind_speeds")
+            fig.savefig(plot_file)
             plt.close(fig)
 
-        # Create the second plot – Lidar wind speed and direction at all elevations
-        # and a data availability quality metric.
-        with self.storage.uploadable_dir(datastream) as tmp_dir:
+            # Create the second plot – Lidar wind speed and direction at all elevations
+            # and a data availability quality metric.
 
             # Reduce dimensionality of dataset – otherwise the details are obscured
             ds_1H: xr.Dataset = ds.resample(time="1H").nearest()
@@ -133,8 +129,6 @@ class Lidar(IngestPipeline):
                 axs[i].set_xlabel("Time (UTC)")
                 axs[i].set_ylabel("Height ASL (m)")
 
-            plot_file = get_filename(
-                dataset, title="wind_speed_and_direction", extension="png"
-            )
-            fig.savefig(tmp_dir / plot_file)
+            plot_file = self.get_ancillary_filepath(title="wind_speed_and_direction")
+            fig.savefig(plot_file)
             plt.close(fig)

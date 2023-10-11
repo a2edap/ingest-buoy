@@ -5,12 +5,14 @@ dataset.yaml definition.
 
 -------------------------------------------------------------------------------------"""
 
-import xarray as xr
-
 from typing import Any
+
+import xarray as xr
 from pydantic import BaseModel, Extra
-from tsdat.io.base import DataConverter
-from tsdat.config.dataset import DatasetConfig
+
+from utils.a2e_tsdat.config.dataset import DatasetConfig
+from utils.a2e_tsdat.io.base import DataConverter
+
 
 # DEVELOPER: Implement your custom DataConverter, giving it a better name and
 # documentation as you do so.

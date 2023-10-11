@@ -1,6 +1,6 @@
 import xarray as xr
 from pathlib import Path
-from tsdat import PipelineConfig, assert_close
+from utils.a2e_tsdat import PipelineConfig, assert_close
 
 # DEVELOPER: Update paths to your configuration(s), test input(s), and expected test
 # results files.

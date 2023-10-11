@@ -1,3 +1,8 @@
 classname: tsdat.io.storage.FileSystem
+parameters: 
+  ancillary_storage_path: buoy/ancillary/{datastream}
+  data_storage_path: buoy/data/{datastream}
+  data_filename_template: "{datastream}.{date_time}[.{qualifier}][.{temporal}].{extension}"
+  ancillary_filename_template: "{location_id}.{dataset_name}.{z_id}.i0.{date_time}[.{qualifier}][.{temporal}].{title}.{extension}"
 handler:
   classname: tsdat.io.handlers.CSVHandler

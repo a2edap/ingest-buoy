@@ -1,5 +1,6 @@
 -r requirements.txt
 cookiecutter==2.1.1
+notebook
 pytest
 coverage
 mypy

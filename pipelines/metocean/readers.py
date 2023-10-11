@@ -1,8 +1,9 @@
-from pydantic import BaseModel, Extra
-import xarray as xr
-import pandas as pd
 import numpy as np
-from tsdat import DataReader
+import pandas as pd
+import xarray as xr
+from pydantic import BaseModel, Extra
+
+from utils.a2e_tsdat import DataReader
 
 
 class BuoyReader(DataReader):

@@ -8,6 +8,10 @@ retriever:
 
 dataset:
   path: pipelines/waves/config/dataset.yaml
+  overrides:
+    /attrs/location_id: morro
+    /attrs/location_meaning: Morro Bay, CA
+    /attrs/z_id: z06
 
 quality:
   path: shared/quality.yaml

@@ -11,7 +11,7 @@ dataset:
   overrides:
     /attrs/location_id: oahu
     /attrs/location_meaning: "Oahu, HI"
-    /attrs/dataset_name: buoy_z07
+    /attrs/z_id: z07
 
 quality:
   path: shared/quality.yaml

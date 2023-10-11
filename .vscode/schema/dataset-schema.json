@@ -1,5 +1,5 @@
 {
-    "title": "DatasetConfig",
+    "title": "A2eDatasetConfig",
     "description": "---------------------------------------------------------------------------------\nDefines the structure and metadata of the dataset produced by a tsdat pipeline.\n\nAlso provides methods to support yaml parsing and validation, including generation\nof json schema.\n\nArgs:\n    attrs (GlobalAttributes): Attributes that pertain to the dataset as a whole.\n    coords (Dict[str, Coordinate]): The dataset's coordinate variables.\n    data_vars (Dict[str, Variable]): The dataset's data variables.\n\n---------------------------------------------------------------------------------",
     "type": "object",
     "properties": {
@@ -8,7 +8,7 @@
             "description": "Attributes that pertain to the dataset as a whole (as opposed to attributes that are specific to individual variables.",
             "allOf": [
                 {
-                    "$ref": "#/definitions/GlobalAttributes"
+                    "$ref": "#/definitions/A2eGlobalAttrs"
                 }
             ]
         },
@@ -16,20 +16,16 @@
             "title": "Coords",
             "description": "This section defines the coordinate variables that the rest of the data are dimensioned by. Coordinate variable data can either be retrieved from an input data source or defined statically via the 'data' property. Note that tsdat requires the dataset at least be dimensioned by a 'time' variable. Most datasets will only need the 'time' coordinate variable, but multidimensional datasets (e.g., ADCP or Lidar data (time, height)) are well-supported. Note that the 'dims' attribute is still required for coordinate variables, and that this value should be [<name>], where <name> is the name of the coord (e.g., 'time').",
             "type": "object",
-            "patternProperties": {
-                "^[a-zA-Z0-9_\\(\\)\\/\\[\\]\\{\\}\\.]+$": {
-                    "$ref": "#/definitions/Coordinate"
-                }
+            "additionalProperties": {
+                "$ref": "#/definitions/Coordinate"
             }
         },
         "data_vars": {
             "title": "Data Vars",
             "description": "This section defines the data variables that the output dataset will contain. Variable data can either be retrieved from an input data source, defined statically via the 'data' property, or initalized to missing and set dynamically via user code in a tsdat pipeline.",
             "type": "object",
-            "patternProperties": {
-                "^[a-zA-Z0-9_\\(\\)\\/\\[\\]\\{\\}\\.]+$": {
-                    "$ref": "#/definitions/Variable"
-                }
+            "additionalProperties": {
+                "$ref": "#/definitions/Variable"
             }
         }
     },
@@ -38,10 +34,9 @@
         "coords",
         "data_vars"
     ],
-    "additionalProperties": false,
     "definitions": {
-        "GlobalAttributes": {
-            "title": "GlobalAttributes",
+        "A2eGlobalAttrs": {
+            "title": "A2eGlobalAttrs",
             "description": "Global attributes that will be recorded in the output dataset. These metadata are\nused to record data provenance information (e.g., location, institution, etc),\nconstruct datastream and file names (i.e., location_id, dataset_name, qualifier,\ntemporal, and data_level attributes), as well as provide metadata that is useful for\ndata users (e.g., title, description, ... ).",
             "type": "object",
             "properties": {
@@ -87,35 +82,35 @@
                 },
                 "location_id": {
                     "title": "Location Id",
-                    "description": "A label or acronym for the location where the data were obtained from. Only lowercase alphanumeric characters and '_' are allowed.",
-                    "minLength": 3,
-                    "pattern": "^[a-z0-9_]+$",
+                    "description": "A label or acronym for the location where the data were obtained from. Only alphanumeric characters and '_' are allowed.",
+                    "minLength": 1,
+                    "pattern": "^[a-zA-Z0-9_]+$",
                     "type": "string"
                 },
                 "dataset_name": {
                     "title": "Dataset Name",
                     "description": "A string used to identify the data being produced. Ideally resembles a shortened lowercase version of the title. Only lowercase alphanumeric characters and '_' are allowed.",
-                    "minLength": 3,
+                    "minLength": 2,
                     "pattern": "^[a-z0-9_]+$",
                     "type": "string"
                 },
                 "qualifier": {
                     "title": "Qualifier",
-                    "description": "An optional string which distinguishes these data from other datasets produced by the same instrument. Only lowercase alphanumeric characters and '_' are allowed.",
-                    "minLength": 3,
-                    "pattern": "^[a-z0-9_]+$",
+                    "description": "An optional string which distinguishes these data from other datasets produced by the same instrument. Only alphanumeric characters and '_' are allowed.",
+                    "minLength": 1,
+                    "pattern": "^[a-zA-Z0-9_]+$",
                     "type": "string"
                 },
                 "temporal": {
                     "title": "Temporal",
-                    "description": "An optional string which describes the temporal resolution of the data (if it spaced in regular intervals). This string should be formated as a number followed by a unit of measurement, e.g., '10m' would indicate the data is sampled every ten minutes. Only lowercase alphanumeric characters are allowed.",
+                    "description": "An optional string which describes the temporal resolution of the data (if spaced in regular intervals). This string should be formatted as a number followed by a unit of measurement, e.g., '10m' would indicate the data is sampled every ten minutes. Only lowercase alphanumeric characters are allowed.",
                     "minLength": 2,
                     "pattern": "^[0-9]+[a-zA-Z]+$",
                     "type": "string"
                 },
                 "data_level": {
                     "title": "Data Level",
-                    "description": "A string used to indicate the level of processing of the output data. It should be formated as a letter followed by a number. Typical values for this include: a1 - data is ingested (no qc), b1 - data is ingested and quality checks applied, c1 (or higher) - one or more a* or b* datastreams used to create a higher-level data product. Only lowercase alphanumeric characters are allowed.",
+                    "description": "A string used to indicate the level of processing of the output data. It should be formatted as a letter followed by a number. Typical values for this include: a1 - data is ingested (no qc), b1 - data is ingested and quality checks applied, c1 (or higher) - one or more a* or b* datastreams used to create a higher-level data product. Only lowercase alphanumeric characters are allowed.",
                     "maxLength": 3,
                     "minLength": 2,
                     "pattern": "^[a-z0-9]+$",
@@ -137,6 +132,12 @@
                     "title": "Code Version",
                     "description": "Attribute that will be recorded automatically by the pipeline. A warning will be raised if this is set in the config file. The code_version attribute reads the 'CODE_VERSION' environment variable or parses the git history to determine the version of the code. Semantic versioning is used by default (v'major.minor.micro'; e.g., 1.2.3).",
                     "type": "string"
+                },
+                "z_id": {
+                    "title": "Z Id",
+                    "description": "The instance code for the instrument, used to differentiate multiple instances of the same instrument at a given location. Looks like 'z01', 'z02', etc.",
+                    "pattern": "[a-z][0-9]{2}",
+                    "type": "string"
                 }
             },
             "required": [
@@ -144,12 +145,13 @@
                 "description",
                 "location_id",
                 "dataset_name",
-                "data_level"
+                "data_level",
+                "z_id"
             ]
         },
         "VariableAttributes": {
             "title": "VariableAttributes",
-            "description": "Attributes that will be recorded in the output dataset. These metadata are used to\nrecord information about the data properties and related fields (e.g., units,\nancillary_variables, etc), user-facing metadata (e.g., long_name, comment), as well as\nattributes related to quality checks and controls (e.g., valid_*, fail_*, and warn_*\nproperties).",
+            "description": "Attributes that will be recorded in the output dataset.\n\nThese metadata are to record information about the data properties and related\nfields (e.g., units, ancillary_variables, etc), user-facing metadata (e.g.,\nlong_name, comment), as well as attributes related to quality checks and controls\n(e.g., valid_*, fail_*, and warn_* properties).",
             "type": "object",
             "properties": {
                 "units": {
@@ -219,8 +221,7 @@
                 },
                 "_FillValue": {
                     "title": " Fillvalue",
-                    "description": "A value used to initialize the variable's data and indicate that the data is missing. Defaults to -9999 for numerical data. If choosing a different value, it is important to use a value that could not reasonably be mistaken for a physical value or data point.",
-                    "type": "number"
+                    "description": "A value used to initialize the variable's data and indicate that the data is missing. Defaults to -9999 for numerical data. If choosing a different value, it is important to use a value that could not reasonably be mistaken for a physical value or data point."
                 }
             }
         },
