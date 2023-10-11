@@ -1,7 +1,6 @@
-from pydantic import BaseModel, Extra
-import xarray as xr
-import pandas as pd
 import numpy as np
+import pandas as pd
+import xarray as xr
 from tsdat import DataReader
 
 
@@ -53,6 +52,7 @@ class BuoyReader(DataReader):
             ds["current_direction"] = xr.DataArray(
                 data=dir_data, dims=["time", "depth"]
             )
+            # TODO: drop vel/dir data
 
         # Hack if currents file is missing
         if "depth" not in ds:

@@ -1,9 +1,10 @@
-import xarray as xr
 import act
 import matplotlib.pyplot as plt
-from tsdat import IngestPipeline, get_start_date_and_time_str, get_filename
-from utils import format_time_xticks
+import xarray as xr
 from cmocean.cm import amp_r, dense, haline
+from tsdat import IngestPipeline, get_filename, get_start_date_and_time_str
+
+from utils import format_time_xticks
 
 
 class Waves(IngestPipeline):
@@ -26,7 +27,6 @@ class Waves(IngestPipeline):
         plt.style.use("shared/styling.mplstyle")
 
         with self.storage.uploadable_dir(datastream) as tmp_dir:
-
             fig, axs = plt.subplots(nrows=3)
             fig.suptitle(f"Wave Statistics at {loc} on {date} {time}")
 
@@ -55,7 +55,7 @@ class Waves(IngestPipeline):
 
             for i in range(3):
                 axs[i].set_xlabel("Time (UTC)")
-                format_time_xticks(axs[i])
+                # format_time_xticks(axs[i])
 
             plot_file = get_filename(ds, title="wave_data_plots", extension="png")
             fig.savefig(tmp_dir / plot_file)
